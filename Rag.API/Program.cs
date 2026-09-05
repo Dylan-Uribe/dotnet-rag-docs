@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML.Tokenizers;
 using Rag.API.Data;
+using Rag.API.Ingestion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("Postgres"),
         o => o.UseVector())
 );
+
+builder.Services.AddSingleton<Tokenizer>(
+    TiktokenTokenizer.CreateForEncoding("cl100k_base"));
+
+builder.Services.AddScoped<IChunker, RecursiveChunker>();
 
 var app = builder.Build();
 
