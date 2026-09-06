@@ -50,13 +50,50 @@ public class RecursiveChunker : IChunker
 
         var builder = new StringBuilder();
         int builderTokens = 0;
+        var currentParts = new List<(string Text, int Tokens)>();
 
-        void SealChunk()
+        void SealChunk(bool carryOverlap = false)
         {
-            if (builder.Length.Equals(0)) return;
-            chunks.Add(new TextChunk(builder.ToString().Trim(), pageNumber));
+            string sealed_ = builder.ToString().Trim();
+
+            if (sealed_.Length == 0)
+            {
+                builder.Clear();
+                builderTokens = 0;
+                currentParts.Clear();
+                return;
+            }
+
+            chunks.Add(new TextChunk(sealed_, pageNumber));
+
+            var carried = new List<(string Text, int Tokens)>();
+
+            if (carryOverlap && _chunkOverlap > 0 && currentParts.Count > 1)
+            {
+                int collected = 0;
+                int maxOverlap = Math.Min(_chunkOverlap, _chunkSize / 2);
+
+                for (int i = currentParts.Count - 1; i >= 1; i--)
+                {
+                    if (collected + currentParts[i].Tokens > maxOverlap) break;
+
+                    carried.Add(currentParts[i]);
+                    collected += currentParts[i].Tokens;
+                }
+
+                carried.Reverse();
+            }
+
             builder.Clear();
             builderTokens = 0;
+            currentParts.Clear();
+
+            foreach (var part in carried)
+            {
+                builder.Append(part.Text).Append(separator);
+                builderTokens += part.Tokens;
+                currentParts.Add(part);
+            }
         }
 
         foreach (string part in parts)
@@ -67,20 +104,21 @@ public class RecursiveChunker : IChunker
 
             if (partTokens > _chunkSize)
             {
-                SealChunk();
+                SealChunk(carryOverlap: false);
                 SplitRecursively(part, pageNumber, separatorIndex + 1, chunks);
                 continue;
             }
 
             if (builderTokens + partTokens > _chunkSize) 
             {
-                SealChunk();
+                SealChunk(carryOverlap: true);
             }
 
             builder.Append(part).Append(separator);
+            currentParts.AddRange((part,partTokens));
             builderTokens += partTokens;
         }
 
-        SealChunk();
+        SealChunk(carryOverlap: false);
     }
 }
