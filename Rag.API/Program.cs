@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.ML.Tokenizers;
 using Rag.API.Data;
 using Rag.API.Ingestion;
+using Rag.API.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddSingleton<Tokenizer>(
     TiktokenTokenizer.CreateForEncoding("cl100k_base"));
 
 builder.Services.AddScoped<IChunker, RecursiveChunker>();
+builder.Services.AddSingleton<IDocumentParser, PdfParser>();
+
+builder.Services.Configure<RagOptions>(builder.Configuration.GetSection("Rag"));
 
 var app = builder.Build();
 
