@@ -1,8 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Options;
 using Microsoft.ML.Tokenizers;
+using OpenAI;
 using Rag.API.Data;
+using Rag.API.Embeddings;
+using Rag.API.Endpoints;
 using Rag.API.Ingestion;
 using Rag.API.Options;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +25,29 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddSingleton<Tokenizer>(
     TiktokenTokenizer.CreateForEncoding("cl100k_base"));
 
-builder.Services.AddScoped<IChunker, RecursiveChunker>();
+builder.Services.AddSingleton<IChunker, RecursiveChunker>();
 builder.Services.AddSingleton<IDocumentParser, PdfParser>();
 
 builder.Services.Configure<RagOptions>(builder.Configuration.GetSection("Rag"));
+builder.Services.Configure<OpenAIOptions>(builder.Configuration.GetSection("OpenAI"));
+
+builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
+
+    if (string.IsNullOrWhiteSpace(options.ApiKey))
+    {
+        throw new InvalidOperationException(
+            "OpenAI:ApiKey is not configured. Run: dotnet user-secrets set \"OpenAI:ApiKey\" \"sk-...\"");
+    }
+
+    return new OpenAIClient(options.ApiKey)
+        .GetEmbeddingClient(options.EmbeddingModel)
+        .AsIEmbeddingGenerator();
+});
+
+builder.Services.AddSingleton<IEmbeddingService, OpenAIEmbeddingService>();
+builder.Services.AddScoped<IIngestionService, IngestionService>();
 
 var app = builder.Build();
 
@@ -30,8 +55,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
 
+app.MapIngestionEndpoints();
 app.Run();

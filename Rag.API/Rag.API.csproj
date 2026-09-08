@@ -24,6 +24,7 @@
     <PackageReference Include="PdfPig" Version="0.1.16" />
     <PackageReference Include="Pgvector" Version="0.3.2" />
     <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.3.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.3" />
   </ItemGroup>
 
 </Project>

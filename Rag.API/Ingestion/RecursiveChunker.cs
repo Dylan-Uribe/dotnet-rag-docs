@@ -115,7 +115,7 @@ public class RecursiveChunker : IChunker
             }
 
             builder.Append(part).Append(separator);
-            currentParts.AddRange((part,partTokens));
+            currentParts.Add((part,partTokens));
             builderTokens += partTokens;
         }
 
