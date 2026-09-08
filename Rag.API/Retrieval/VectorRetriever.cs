@@ -1,0 +1,38 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Pgvector;
+using Pgvector.EntityFrameworkCore;
+using Rag.API.Data;
+using Rag.API.Embeddings;
+using Rag.API.Options;
+
+namespace Rag.API.Retrieval;
+
+public sealed class VectorRetriever(
+    ApplicationDbContext db,
+    IEmbeddingService embeddings,
+    IOptions<RagOptions> options) : IRetriever
+{
+    private readonly RagOptions _options = options.Value;
+
+    public async Task<IReadOnlyList<RetrievedChunk>> RetrieveAsync(string question)
+    {
+        var vectors = await embeddings.EmbedAsync([question]);
+        var queryVector = new Vector(vectors[0]);
+
+        var candidates = await db.DocumentChunks
+            .AsNoTracking()
+            .OrderBy(chunk => chunk.Embedding.CosineDistance(queryVector))
+            .Take(_options.TopK)
+            .Select(chunk => new RetrievedChunk(
+                chunk.Document.Name,
+                chunk.PageNumber,
+                chunk.TextContent,
+                chunk.Embedding.CosineDistance(queryVector)))
+            .ToListAsync();
+
+        return _options.MaxDistance is { } max
+            ? candidates.Where(chunk => chunk.Distance <= max).ToList()
+            : candidates;
+    }
+}

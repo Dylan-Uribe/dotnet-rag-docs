@@ -8,6 +8,7 @@ using Rag.API.Embeddings;
 using Rag.API.Endpoints;
 using Rag.API.Ingestion;
 using Rag.API.Options;
+using Rag.API.Retrieval;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +49,7 @@ builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp 
 
 builder.Services.AddSingleton<IEmbeddingService, OpenAIEmbeddingService>();
 builder.Services.AddScoped<IIngestionService, IngestionService>();
+builder.Services.AddScoped<IRetriever, VectorRetriever>();
 
 var app = builder.Build();
 
@@ -61,4 +63,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapIngestionEndpoints();
+app.MapQueryEndpoints();
 app.Run();
