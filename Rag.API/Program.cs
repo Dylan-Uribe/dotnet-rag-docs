@@ -6,6 +6,7 @@ using OpenAI;
 using Rag.API.Data;
 using Rag.API.Embeddings;
 using Rag.API.Endpoints;
+using Rag.API.Generation;
 using Rag.API.Ingestion;
 using Rag.API.Options;
 using Rag.API.Retrieval;
@@ -50,6 +51,7 @@ builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp 
 builder.Services.AddSingleton<IEmbeddingService, OpenAIEmbeddingService>();
 builder.Services.AddScoped<IIngestionService, IngestionService>();
 builder.Services.AddScoped<IRetriever, VectorRetriever>();
+builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
 
 var app = builder.Build();
 

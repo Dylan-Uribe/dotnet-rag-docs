@@ -1,4 +1,5 @@
 ﻿using Rag.API.Contracts;
+using Rag.API.Generation;
 using Rag.API.Retrieval;
 
 namespace Rag.API.Endpoints;
@@ -7,7 +8,10 @@ public static class QueryEndpoints
 {
     public static IEndpointRouteBuilder MapQueryEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/query", async (QueryRequest request, IRetriever retriever) =>
+        app.MapPost("/query", async (
+            QueryRequest request,
+            IRetriever retriever,
+            IAnswerGenerator generator) =>
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
@@ -15,8 +19,9 @@ public static class QueryEndpoints
             }
 
             var chunks = await retriever.RetrieveAsync(request.Question);
+            var answer = await generator.GenerateAsync(request.Question, chunks);
 
-            return Results.Ok(chunks);
+            return Results.Ok(answer);
         })
         .WithName("Query");
 
