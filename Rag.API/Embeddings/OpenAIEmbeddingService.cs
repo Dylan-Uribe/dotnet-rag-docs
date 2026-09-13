@@ -29,7 +29,8 @@ public sealed class OpenAIEmbeddingService : IEmbeddingService
 
         foreach (string[] batch in texts.Chunk(_batchSize))
         {
-            var response = await _generator.GenerateAsync(batch, options);
+            GeneratedEmbeddings<Embedding<float>> response =
+                await _generator.GenerateAsync(batch, options);
             vectors.AddRange(response.Select(e => e.Vector.ToArray()));
         }
 

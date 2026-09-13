@@ -21,7 +21,6 @@ public sealed class VectorRetriever(
         var queryVector = new Vector(vectors[0]);
 
         var candidates = await db.DocumentChunks
-            .AsNoTracking()
             .OrderBy(chunk => chunk.Embedding.CosineDistance(queryVector))
             .Take(_options.TopK)
             .Select(chunk => new RetrievedChunk(
@@ -31,8 +30,12 @@ public sealed class VectorRetriever(
                 chunk.Embedding.CosineDistance(queryVector)))
             .ToListAsync();
 
-        return _options.MaxDistance is { } max
-            ? candidates.Where(chunk => chunk.Distance <= max).ToList()
-            : candidates;
+        if (_options.MaxDistance.HasValue) 
+        {
+            double max = _options.MaxDistance.Value;
+            return candidates.Where(chunk => chunk.Distance <= max).ToList();
+        }
+
+        return candidates;
     }
 }
