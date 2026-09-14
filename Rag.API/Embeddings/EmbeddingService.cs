@@ -1,16 +1,16 @@
-﻿using Microsoft.Extensions.AI;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using Rag.API.Options;
 
 namespace Rag.API.Embeddings;
 
-public sealed class OpenAIEmbeddingService : IEmbeddingService
+public sealed class EmbeddingService : IEmbeddingService
 {
     private readonly IEmbeddingGenerator<string, Embedding<float>> _generator;
     private readonly int _dimensions;
     private readonly int _batchSize;
 
-    public OpenAIEmbeddingService(
+    public EmbeddingService(
         IEmbeddingGenerator<string, Embedding<float>> generator,
         IOptions<OpenAIOptions> options)
     {

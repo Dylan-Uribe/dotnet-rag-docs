@@ -47,18 +47,21 @@ builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp 
 {
     var options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
 
-    if (string.IsNullOrWhiteSpace(options.ApiKey))
-    {
-        throw new InvalidOperationException(
-            "OpenAI:ApiKey is not configured. Run: dotnet user-secrets set \"OpenAI:ApiKey\" \"sk-...\"");
-    }
-
     return new OpenAIClient(options.ApiKey)
         .GetEmbeddingClient(options.EmbeddingModel)
         .AsIEmbeddingGenerator();
 });
 
-builder.Services.AddSingleton<IEmbeddingService, OpenAIEmbeddingService>();
+builder.Services.AddSingleton<IChatClient>(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
+
+    return new OpenAIClient(options.ApiKey)
+        .GetChatClient(options.ChatModel)
+        .AsIChatClient();
+});
+
+builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddScoped<IIngestionService, IngestionService>();
 builder.Services.AddScoped<IRetriever, VectorRetriever>();
 builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();

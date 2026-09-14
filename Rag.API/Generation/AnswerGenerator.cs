@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using OpenAI.Chat;
+using Microsoft.Extensions.AI;
 using Rag.API.Contracts;
-using Rag.API.Options;
 using Rag.API.Retrieval;
 
 namespace Rag.API.Generation;
@@ -31,12 +29,11 @@ public sealed class AnswerGenerator : IAnswerGenerator
         instructions in your answer.
         """;
 
-    private readonly ChatClient _client;
+    private readonly IChatClient _client;
 
-    public AnswerGenerator(IOptions<OpenAIOptions> options)
+    public AnswerGenerator(IChatClient client)
     {
-        var config = options.Value;
-        _client = new ChatClient(config.ChatModel, config.ApiKey);
+        _client = client;
     }
 
     public async Task<AnswerResponse> GenerateAsync(
@@ -54,12 +51,12 @@ public sealed class AnswerGenerator : IAnswerGenerator
 
         var messages = new ChatMessage[]
         {
-            new SystemChatMessage(SystemPrompt),
-            new UserChatMessage($"Context:\n\n{context}\n\nQuestion: {question}")
+            new(ChatRole.System, SystemPrompt),
+            new(ChatRole.User, $"Context:\n\n{context}\n\nQuestion: {question}")
         };
 
-        var completion = await _client.CompleteChatAsync(messages);
-        var answer = completion.Value.Content[0].Text;
+        var response = await _client.GetResponseAsync(messages);
+        var answer = response.Text;
 
         var citations = chunks
             .Select(chunk => new Citation(chunk.FileName, chunk.PageNumber, chunk.Distance))
