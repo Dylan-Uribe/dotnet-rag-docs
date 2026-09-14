@@ -1,4 +1,5 @@
-﻿using Rag.API.Contracts;
+﻿using Rag.API.Common;
+using Rag.API.Contracts;
 using Rag.API.Ingestion;
 
 namespace Rag.API.Endpoints;
@@ -16,18 +17,20 @@ public static class IngestionEndpoints
                 return Results.BadRequest("The uploaded file is empty.");
             }
 
-            if (!file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-            {
-                return Results.BadRequest("Only PDF files are supported.");
-            }
-
             await using var stream = file.OpenReadStream();
 
             var result = await ingestion.IngestAsync(stream, file.FileName);
 
             if (!result.IsSuccess)
             {
-                return Results.UnprocessableEntity(result.Error!.Message);
+                var error = result.Error!;
+                var status = error.Type switch
+                {
+                    ErrorType.UnsupportedType => StatusCodes.Status415UnsupportedMediaType,
+                    _ => StatusCodes.Status422UnprocessableEntity
+                };
+
+                return Results.Problem(detail: error.Message, statusCode: status);
             }
 
             var value = result.Value!;

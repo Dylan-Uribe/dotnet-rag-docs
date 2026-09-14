@@ -9,6 +9,8 @@ public sealed class PdfParser : IDocumentParser
     private const double FullWidthPercentile = 0.90;
     private const int WordSlack = 12;
 
+    public IReadOnlyCollection<string> SupportedExtensions { get; } = [".pdf"];
+
     public IReadOnlyList<PageText> Parse(Stream documentStream)
     {
         ArgumentNullException.ThrowIfNull(documentStream);

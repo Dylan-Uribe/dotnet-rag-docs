@@ -8,18 +8,18 @@ namespace Rag.API.Ingestion;
 
 public class IngestionService : IIngestionService
 {
-    private readonly IDocumentParser _parser;
+    private readonly IReadOnlyList<IDocumentParser> _parsers;
     private readonly IChunker _chunker;
     private readonly IEmbeddingService _embeddings;
     private readonly ApplicationDbContext _dbContext;
 
     public IngestionService(
-        IDocumentParser parser,
+        IEnumerable<IDocumentParser> parsers,
         IChunker chunker,
         IEmbeddingService embeddings,
         ApplicationDbContext db)
     {
-        _parser = parser;
+        _parsers = parsers.ToList();
         _chunker = chunker;
         _embeddings = embeddings;
         _dbContext = db;
@@ -27,7 +27,19 @@ public class IngestionService : IIngestionService
 
     public async Task<Result<IngestionResult>> IngestAsync(Stream documentStream, string fileName)
     {
-        var pages = _parser.Parse(documentStream);
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+        var parser = _parsers.FirstOrDefault(
+            p => p.SupportedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase));
+
+        if (parser is null)
+        {
+            return Result<IngestionResult>.Failure(new Error(
+                ErrorType.UnsupportedType,
+                $"No parser is registered for '{extension}' files."));
+        }
+
+        var pages = parser.Parse(documentStream);
 
         if (pages.Count == 0)
         {
