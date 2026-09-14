@@ -1,3 +1,8 @@
-﻿namespace Rag.API.Contracts;
+using System.ComponentModel.DataAnnotations;
 
-public sealed record QueryRequest(string Question);
+namespace Rag.API.Contracts;
+
+public sealed record QueryRequest(
+    [property: Required]
+    [property: MaxLength(1000)]
+    string Question);

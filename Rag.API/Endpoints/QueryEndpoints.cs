@@ -11,13 +11,6 @@ public static class QueryEndpoints
             QueryRequest request,
             IQueryService queryService) =>
         {
-            if (string.IsNullOrWhiteSpace(request.Question))
-            {
-                return Results.Problem(
-                    detail: "Question must not be empty.",
-                    statusCode: StatusCodes.Status400BadRequest);
-            }
-
             var answer = await queryService.AskAsync(request.Question);
 
             return Results.Ok(answer);
@@ -25,7 +18,7 @@ public static class QueryEndpoints
         .WithName("Query")
         .WithTags("Query")
         .Produces<AnswerResponse>(StatusCodes.Status200OK)
-        .ProducesProblem(StatusCodes.Status400BadRequest);
+        .ProducesValidationProblem();
 
         return app;
     }
