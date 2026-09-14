@@ -10,6 +10,7 @@ using Rag.API.Endpoints;
 using Rag.API.Generation;
 using Rag.API.Ingestion;
 using Rag.API.Options;
+using Rag.API.Query;
 using Rag.API.Retrieval;
 using Scalar.AspNetCore;
 
@@ -69,6 +70,7 @@ builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddScoped<IIngestionService, IngestionService>();
 builder.Services.AddScoped<IRetriever, VectorRetriever>();
 builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
+builder.Services.AddScoped<IQueryService, QueryService>();
 
 var app = builder.Build();
 
