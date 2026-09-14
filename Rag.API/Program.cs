@@ -30,8 +30,18 @@ builder.Services.AddSingleton<Tokenizer>(
 builder.Services.AddSingleton<IChunker, RecursiveChunker>();
 builder.Services.AddSingleton<IDocumentParser, PdfParser>();
 
-builder.Services.Configure<RagOptions>(builder.Configuration.GetSection("Rag"));
-builder.Services.Configure<OpenAIOptions>(builder.Configuration.GetSection("OpenAI"));
+builder.Services.AddOptions<RagOptions>()
+    .Bind(builder.Configuration.GetSection(RagOptions.SectionName))
+    .ValidateDataAnnotations()
+    .Validate(
+        o => o.ChunkOverlapTokens < o.ChunkSizeTokens,
+        "Rag:ChunkOverlapTokens must be less than Rag:ChunkSizeTokens.")
+    .ValidateOnStart();
+
+builder.Services.AddOptions<OpenAIOptions>()
+    .Bind(builder.Configuration.GetSection(OpenAIOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 
 builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
 {

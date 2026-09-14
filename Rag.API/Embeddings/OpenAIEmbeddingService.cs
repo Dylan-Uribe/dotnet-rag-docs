@@ -12,12 +12,11 @@ public sealed class OpenAIEmbeddingService : IEmbeddingService
 
     public OpenAIEmbeddingService(
         IEmbeddingGenerator<string, Embedding<float>> generator,
-        IOptions<OpenAIOptions> openAiOptions,
-        IOptions<RagOptions> ragOptions)
+        IOptions<OpenAIOptions> options)
     {
         _generator = generator;
-        _dimensions = openAiOptions.Value.EmbeddingDimensions;
-        _batchSize = ragOptions.Value.EmbeddingBatchSize;
+        _dimensions = options.Value.EmbeddingDimensions;
+        _batchSize = options.Value.EmbeddingBatchSize;
     }
 
     public async Task<IReadOnlyList<float[]>> EmbedAsync(IReadOnlyList<string> texts)
