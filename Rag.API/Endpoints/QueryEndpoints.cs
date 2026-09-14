@@ -13,14 +13,19 @@ public static class QueryEndpoints
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
-                return Results.BadRequest(new { error = "Question must not be empty." });
+                return Results.Problem(
+                    detail: "Question must not be empty.",
+                    statusCode: StatusCodes.Status400BadRequest);
             }
 
             var answer = await queryService.AskAsync(request.Question);
 
             return Results.Ok(answer);
         })
-        .WithName("Query");
+        .WithName("Query")
+        .WithTags("Query")
+        .Produces<AnswerResponse>(StatusCodes.Status200OK)
+        .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return app;
     }
