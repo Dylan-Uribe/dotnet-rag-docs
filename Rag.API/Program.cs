@@ -3,6 +3,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using Microsoft.ML.Tokenizers;
 using OpenAI;
+using Rag.API.Common;
 using Rag.API.Data;
 using Rag.API.Embeddings;
 using Rag.API.Endpoints;
@@ -17,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(
@@ -67,6 +71,8 @@ builder.Services.AddScoped<IRetriever, VectorRetriever>();
 builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
