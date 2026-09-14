@@ -5,6 +5,7 @@ using Microsoft.ML.Tokenizers;
 using OpenAI;
 using Rag.API.Common;
 using Rag.API.Data;
+using Rag.API.Documents;
 using Rag.API.Embeddings;
 using Rag.API.Endpoints;
 using Rag.API.Generation;
@@ -69,6 +70,7 @@ builder.Services.AddSingleton<IChatClient>(sp =>
 
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddScoped<IIngestionService, IngestionService>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IRetriever, VectorRetriever>();
 builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
 builder.Services.AddScoped<IQueryService, QueryService>();
@@ -86,6 +88,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIngestionEndpoints();
+app.MapDocumentsEndpoints();
 app.MapQueryEndpoints();
 app.Run();
