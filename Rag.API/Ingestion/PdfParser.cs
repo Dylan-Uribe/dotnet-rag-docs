@@ -27,13 +27,6 @@ public sealed class PdfParser : IDocumentParser
             pages.Add(new PageText(text, page.Number));
         }
 
-        if (pages.Count == 0)
-        {
-            throw new InvalidOperationException(
-                "No extractable text was found in the document. " +
-                "It is likely a scanned PDF with no text layer and would require OCR.");
-        }
-
         return pages;
     }
 

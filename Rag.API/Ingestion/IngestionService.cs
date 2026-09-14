@@ -1,4 +1,5 @@
-﻿using Pgvector;
+using Pgvector;
+using Rag.API.Common;
 using Rag.API.Data;
 using Rag.API.Domain;
 using Rag.API.Embeddings;
@@ -13,10 +14,10 @@ public class IngestionService : IIngestionService
     private readonly ApplicationDbContext _dbContext;
 
     public IngestionService(
-        IDocumentParser parser, 
-        IChunker chunker, 
+        IDocumentParser parser,
+        IChunker chunker,
         IEmbeddingService embeddings,
-        ApplicationDbContext db) 
+        ApplicationDbContext db)
     {
         _parser = parser;
         _chunker = chunker;
@@ -24,21 +25,27 @@ public class IngestionService : IIngestionService
         _dbContext = db;
     }
 
-    public async Task<IngestionResult> IngestAsync(Stream documentStream, string fileName)
+    public async Task<Result<IngestionResult>> IngestAsync(Stream documentStream, string fileName)
     {
         var pages = _parser.Parse(documentStream);
 
-        var chunks = new List<TextChunk>();
-
-        foreach (var page in pages) 
+        if (pages.Count == 0)
         {
-            chunks.AddRange(_chunker.Chunk(page.Text, page.PageNumber));
+            return Result<IngestionResult>.Failure(new Error(
+                ErrorType.Unprocessable,
+                "No extractable text was found in the document. " +
+                "It is likely a scanned PDF with no text layer and would require OCR."));
         }
+
+        var chunks = pages
+            .SelectMany(page => _chunker.Chunk(page.Text, page.PageNumber))
+            .ToList();
 
         if (chunks.Count == 0)
         {
-            throw new InvalidOperationException(
-                $"'{fileName}' produced no chunks.");
+            return Result<IngestionResult>.Failure(new Error(
+                ErrorType.Unprocessable,
+                $"'{fileName}' produced no chunks."));
         }
 
         var texts = chunks.Select(chunk => chunk.Text).ToList();
@@ -66,7 +73,7 @@ public class IngestionService : IIngestionService
         _dbContext.Documents.Add(document);
         await _dbContext.SaveChangesAsync();
 
-        return new IngestionResult(document.Id, pages.Count, chunks.Count);
-
+        return Result<IngestionResult>.Success(
+            new IngestionResult(document.Id, pages.Count, chunks.Count));
     }
 }

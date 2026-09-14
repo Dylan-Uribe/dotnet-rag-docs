@@ -25,10 +25,17 @@ public static class IngestionEndpoints
 
             var result = await ingestion.IngestAsync(stream, file.FileName);
 
+            if (!result.IsSuccess)
+            {
+                return Results.UnprocessableEntity(result.Error!.Message);
+            }
+
+            var value = result.Value!;
+
             return Results.Ok(new IngestResponse(
-                result.DocumentId,
-                result.PageCount,
-                result.ChunkCount));
+                value.DocumentId,
+                value.PageCount,
+                value.ChunkCount));
         })
         .WithName("IngestDocument")
         .DisableAntiforgery();
