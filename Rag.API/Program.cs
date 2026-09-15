@@ -77,6 +77,12 @@ builder.Services.AddScoped<IQueryService, QueryService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
+
 app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.

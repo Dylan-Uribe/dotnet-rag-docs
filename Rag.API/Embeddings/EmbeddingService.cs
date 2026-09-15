@@ -30,7 +30,22 @@ public sealed class EmbeddingService : IEmbeddingService
         {
             GeneratedEmbeddings<Embedding<float>> response =
                 await _generator.GenerateAsync(batch, options);
-            vectors.AddRange(response.Select(e => e.Vector.ToArray()));
+
+            foreach (var embedding in response)
+            {
+                var vector = embedding.Vector.ToArray();
+
+                if (vector.Length != _dimensions)
+                {
+                    throw new InvalidOperationException(
+                        $"The embedding model returned {vector.Length} dimensions but " +
+                        $"{_dimensions} were configured (OpenAI:EmbeddingDimensions). The database " +
+                        "vector column and the configured dimension must match; to change the model, " +
+                        "update the dimension and add a matching migration.");
+                }
+
+                vectors.Add(vector);
+            }
         }
 
         return vectors;
