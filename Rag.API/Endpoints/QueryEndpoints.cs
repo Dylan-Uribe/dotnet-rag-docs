@@ -11,8 +11,7 @@ public static class QueryEndpoints
             QueryRequest request,
             IQueryService queryService) =>
         {
-            var answer = await queryService.AskAsync(request.Question);
-
+            AnswerResponse answer = await queryService.AskAsync(request.Question);
             return Results.Ok(answer);
         })
         .WithName("Query")
