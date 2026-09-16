@@ -4,18 +4,12 @@ using Rag.API.Data;
 
 namespace Rag.API.Documents;
 
-public sealed class DocumentService : IDocumentService
+public sealed class DocumentService(
+    ApplicationDbContext context) : IDocumentService
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public DocumentService(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<IReadOnlyList<DocumentResponse>> GetAllAsync()
     {
-        return await _dbContext.Documents
+        return await context.Documents
             .OrderByDescending(document => document.IngestedAt)
             .Select(document => new DocumentResponse(
                 document.Id,
@@ -27,7 +21,7 @@ public sealed class DocumentService : IDocumentService
 
     public async Task<DocumentResponse?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Documents
+        return await context.Documents
             .Where(document => document.Id == id)
             .Select(document => new DocumentResponse(
                 document.Id,
@@ -39,7 +33,7 @@ public sealed class DocumentService : IDocumentService
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var affected = await _dbContext.Documents
+        int affected = await context.Documents
             .Where(document => document.Id == id)
             .ExecuteDeleteAsync();
 

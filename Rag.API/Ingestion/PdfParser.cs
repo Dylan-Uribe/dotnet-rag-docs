@@ -1,5 +1,6 @@
-﻿using System.Text;
+using System.Text;
 using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
 namespace Rag.API.Ingestion;
@@ -19,10 +20,10 @@ public sealed class PdfParser : IDocumentParser
 
         using var document = PdfDocument.Open(documentStream);
 
-        foreach (var page in document.GetPages())
+        foreach (Page page in document.GetPages())
         {
-            var raw = ContentOrderTextExtractor.GetText(page);
-            var text = NormalizeParagraphs(raw);
+            string raw = ContentOrderTextExtractor.GetText(page);
+            string text = NormalizeParagraphs(raw);
 
             if (string.IsNullOrWhiteSpace(text)) continue;
 
@@ -36,7 +37,7 @@ public sealed class PdfParser : IDocumentParser
     {
         if (string.IsNullOrWhiteSpace(pageText)) return string.Empty;
 
-        var lines = pageText
+        string[] lines = pageText
             .Replace("\r\n", "\n")
             .Replace('\r', '\n')
             .Split('\n')

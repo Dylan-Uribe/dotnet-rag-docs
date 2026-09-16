@@ -1,3 +1,4 @@
+using Rag.API.Common;
 using Rag.API.Contracts;
 using Rag.API.Documents;
 using Rag.API.Ingestion;
@@ -19,21 +20,20 @@ public static class DocumentsEndpoints
                     statusCode: StatusCodes.Status400BadRequest);
             }
 
-            await using var stream = file.OpenReadStream();
+            await using Stream stream = file.OpenReadStream();
 
-            var result = await ingestion.IngestAsync(stream, file.FileName);
+            Result<IngestResponse> result = await ingestion.IngestAsync(stream, file.FileName);
 
             if (!result.IsSuccess)
             {
                 return result.Error!.ToProblem();
             }
 
-            var value = result.Value!;
-            var response = new IngestResponse(value.DocumentId, value.PageCount, value.ChunkCount);
+            IngestResponse response = result.Value!;
 
             return Results.CreatedAtRoute(
                 routeName: "GetDocumentById",
-                routeValues: new { id = value.DocumentId },
+                routeValues: new { id = response.DocumentId },
                 value: response);
         })
         .WithName("IngestDocument")
@@ -46,8 +46,7 @@ public static class DocumentsEndpoints
 
         app.MapGet("/documents", async (IDocumentService documents) =>
         {
-            var result = await documents.GetAllAsync();
-
+            IReadOnlyList<DocumentResponse> result = await documents.GetAllAsync();
             return Results.Ok(result);
         })
         .WithName("GetDocuments")
@@ -56,7 +55,7 @@ public static class DocumentsEndpoints
 
         app.MapGet("/documents/{id:guid}", async (Guid id, IDocumentService documents) =>
         {
-            var document = await documents.GetByIdAsync(id);
+            DocumentResponse? document = await documents.GetByIdAsync(id);
 
             return document is null
                 ? Results.Problem(
@@ -71,7 +70,7 @@ public static class DocumentsEndpoints
 
         app.MapDelete("/documents/{id:guid}", async (Guid id, IDocumentService documents) =>
         {
-            var deleted = await documents.DeleteAsync(id);
+            bool deleted = await documents.DeleteAsync(id);
 
             return deleted
                 ? Results.NoContent()
