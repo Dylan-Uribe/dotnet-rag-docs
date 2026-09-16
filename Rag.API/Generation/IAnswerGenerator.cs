@@ -1,4 +1,4 @@
-﻿using Rag.API.Contracts;
+using Rag.API.Contracts;
 using Rag.API.Retrieval;
 
 namespace Rag.API.Generation;

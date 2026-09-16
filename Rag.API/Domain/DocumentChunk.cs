@@ -1,6 +1,7 @@
-﻿using Pgvector;
+using Pgvector;
 
 namespace Rag.API.Domain;
+
 public sealed class DocumentChunk
 {
     public Guid Id { get; set; }

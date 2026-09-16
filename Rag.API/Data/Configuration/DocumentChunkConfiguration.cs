@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Rag.API.Domain;
 
@@ -6,7 +6,7 @@ namespace Rag.API.Data.Configuration;
 
 public sealed class DocumentChunkConfiguration : IEntityTypeConfiguration<DocumentChunk>
 {
-    public void Configure(EntityTypeBuilder<DocumentChunk> builder) 
+    public void Configure(EntityTypeBuilder<DocumentChunk> builder)
     {
         builder
             .HasKey(dch => dch.Id);

@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Embeddings;
+namespace Rag.API.Embeddings;
 
 public interface IEmbeddingService
 {

@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Retrieval;
+namespace Rag.API.Retrieval;
 
 public interface IRetriever
 {

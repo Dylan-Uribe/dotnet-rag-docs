@@ -30,7 +30,7 @@ public sealed class VectorRetriever(
                 chunk.Embedding.CosineDistance(queryVector)))
             .ToListAsync();
 
-        if (_options.MaxDistance.HasValue) 
+        if (_options.MaxDistance.HasValue)
         {
             double max = _options.MaxDistance.Value;
             return candidates.Where(chunk => chunk.Distance <= max).ToList();

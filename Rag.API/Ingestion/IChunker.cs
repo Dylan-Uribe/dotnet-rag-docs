@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Ingestion;
+namespace Rag.API.Ingestion;
 
 public interface IChunker
 {

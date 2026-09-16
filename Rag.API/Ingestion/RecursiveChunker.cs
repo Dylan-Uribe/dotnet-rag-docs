@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Rag.API.Options;
 using Microsoft.ML.Tokenizers;
 using System.Text;
@@ -21,7 +21,7 @@ public class RecursiveChunker : IChunker
     {
         var chunks = new List<TextChunk>();
 
-        if (string.IsNullOrWhiteSpace(pageText)) 
+        if (string.IsNullOrWhiteSpace(pageText))
         {
             return chunks;
         }
@@ -109,13 +109,13 @@ public class RecursiveChunker : IChunker
                 continue;
             }
 
-            if (builderTokens + partTokens > _chunkSize) 
+            if (builderTokens + partTokens > _chunkSize)
             {
                 SealChunk(carryOverlap: true);
             }
 
             builder.Append(part).Append(separator);
-            currentParts.Add((part,partTokens));
+            currentParts.Add((part, partTokens));
             builderTokens += partTokens;
         }
 

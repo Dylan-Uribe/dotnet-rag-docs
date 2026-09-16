@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Rag.API.Domain;
 namespace Rag.API.Data;
 
@@ -7,7 +7,7 @@ public sealed class ApplicationDbContext
 {
     public DbSet<Document> Documents => Set<Document>();
     public DbSet<DocumentChunk> DocumentChunks => Set<DocumentChunk>();
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
