@@ -4,36 +4,28 @@ using Rag.API.Options;
 
 namespace Rag.API.Embeddings;
 
-public sealed class EmbeddingService : IEmbeddingService
+public sealed class EmbeddingService(
+    IEmbeddingGenerator<string, Embedding<float>> generator,
+    IOptions<OpenAIOptions> options) : IEmbeddingService
 {
-    private readonly IEmbeddingGenerator<string, Embedding<float>> _generator;
-    private readonly int _dimensions;
-    private readonly int _batchSize;
-
-    public EmbeddingService(
-        IEmbeddingGenerator<string, Embedding<float>> generator,
-        IOptions<OpenAIOptions> options)
-    {
-        _generator = generator;
-        _dimensions = options.Value.EmbeddingDimensions;
-        _batchSize = options.Value.EmbeddingBatchSize;
-    }
+    private readonly int _dimensions = options.Value.EmbeddingDimensions;
+    private readonly int _batchSize = options.Value.EmbeddingBatchSize;
 
     public async Task<IReadOnlyList<float[]>> EmbedAsync(IReadOnlyList<string> texts)
     {
         if (texts.Count == 0) return [];
 
-        var options = new EmbeddingGenerationOptions { Dimensions = _dimensions };
+        var generationOptions = new EmbeddingGenerationOptions { Dimensions = _dimensions };
         var vectors = new List<float[]>(texts.Count);
 
         foreach (string[] batch in texts.Chunk(_batchSize))
         {
             GeneratedEmbeddings<Embedding<float>> response =
-                await _generator.GenerateAsync(batch, options);
+                await generator.GenerateAsync(batch, generationOptions);
 
-            foreach (var embedding in response)
+            foreach (Embedding<float> embedding in response)
             {
-                var vector = embedding.Vector.ToArray();
+                float[] vector = embedding.Vector.ToArray();
 
                 if (vector.Length != _dimensions)
                 {

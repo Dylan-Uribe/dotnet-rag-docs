@@ -15,7 +15,7 @@ using Rag.API.Query;
 using Rag.API.Retrieval;
 using Scalar.AspNetCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
@@ -50,7 +50,7 @@ builder.Services.AddOptions<OpenAIOptions>()
 
 builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
 {
-    var options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
+    OpenAIOptions options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
 
     return new OpenAIClient(options.ApiKey)
         .GetEmbeddingClient(options.EmbeddingModel)
@@ -59,7 +59,7 @@ builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp 
 
 builder.Services.AddSingleton<IChatClient>(sp =>
 {
-    var options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
+    OpenAIOptions options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
 
     return new OpenAIClient(options.ApiKey)
         .GetChatClient(options.ChatModel)
@@ -73,11 +73,11 @@ builder.Services.AddScoped<IRetriever, VectorRetriever>();
 builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
 builder.Services.AddScoped<IQueryService, QueryService>();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (IServiceScope scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.Migrate();
 }
 
