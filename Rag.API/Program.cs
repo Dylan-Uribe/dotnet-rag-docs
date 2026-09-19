@@ -1,85 +1,19 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Options;
-using Microsoft.ML.Tokenizers;
-using OpenAI;
-using Rag.API.Common;
-using Rag.API.Data;
-using Rag.API.Documents;
-using Rag.API.Embeddings;
 using Rag.API.Endpoints;
-using Rag.API.Generation;
-using Rag.API.Ingestion;
-using Rag.API.Options;
-using Rag.API.Query;
-using Rag.API.Retrieval;
+using Rag.API.Extensions;
 using Scalar.AspNetCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-
-builder.Services.AddProblemDetails();
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddValidation();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("Postgres"),
-        o => o.UseVector())
-);
-
-builder.Services.AddSingleton<Tokenizer>(
-    TiktokenTokenizer.CreateForEncoding("cl100k_base"));
-
-builder.Services.AddSingleton<IChunker, RecursiveChunker>();
-builder.Services.AddSingleton<IDocumentParser, PdfParser>();
-
-builder.Services.AddOptions<RagOptions>()
-    .Bind(builder.Configuration.GetSection(RagOptions.SectionName))
-    .ValidateDataAnnotations()
-    .Validate(
-        o => o.ChunkOverlapTokens < o.ChunkSizeTokens,
-        "Rag:ChunkOverlapTokens must be less than Rag:ChunkSizeTokens.")
-    .ValidateOnStart();
-
-builder.Services.AddOptions<OpenAIOptions>()
-    .Bind(builder.Configuration.GetSection(OpenAIOptions.SectionName))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
-
-builder.Services.AddSingleton<IEmbeddingGenerator<string, Embedding<float>>>(sp =>
-{
-    OpenAIOptions options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
-
-    return new OpenAIClient(options.ApiKey)
-        .GetEmbeddingClient(options.EmbeddingModel)
-        .AsIEmbeddingGenerator();
-});
-
-builder.Services.AddSingleton<IChatClient>(sp =>
-{
-    OpenAIOptions options = sp.GetRequiredService<IOptions<OpenAIOptions>>().Value;
-
-    return new OpenAIClient(options.ApiKey)
-        .GetChatClient(options.ChatModel)
-        .AsIChatClient();
-});
-
-builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
-builder.Services.AddScoped<IIngestionService, IngestionService>();
-builder.Services.AddScoped<IDocumentService, DocumentService>();
-builder.Services.AddScoped<IRetriever, VectorRetriever>();
-builder.Services.AddSingleton<IAnswerGenerator, AnswerGenerator>();
-builder.Services.AddScoped<IQueryService, QueryService>();
+builder.Services
+    .AddApiServices()
+    .AddPersistence(builder.Configuration)
+    .AddConfiguredOptions()
+    .AddAiProviders()
+    .AddApplicationServices();
 
 WebApplication app = builder.Build();
 
-using (IServiceScope scope = app.Services.CreateScope())
-{
-    ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
+app.ApplyMigrations();
 
 app.UseExceptionHandler();
 
@@ -93,4 +27,5 @@ app.UseHttpsRedirection();
 
 app.MapDocumentsEndpoints();
 app.MapQueryEndpoints();
+
 app.Run();
