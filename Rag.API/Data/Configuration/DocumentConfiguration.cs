@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Rag.API.Domain;
 
@@ -6,7 +6,7 @@ namespace Rag.API.Data.Configuration;
 
 public sealed class DocumentConfiguration : IEntityTypeConfiguration<Document>
 {
-    public void Configure(EntityTypeBuilder<Document> builder) 
+    public void Configure(EntityTypeBuilder<Document> builder)
     {
         builder
             .HasKey(d => d.Id);

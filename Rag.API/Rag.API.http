@@ -1,6 +1,33 @@
 @Rag.API_HostAddress = http://localhost:5094
+# Docker: http://localhost:8080
+@documentId = 00000000-0000-0000-0000-000000000000
 
-GET {{Rag.API_HostAddress}}/weatherforecast/
+### Ingest a PDF document (adjust the file path to a real PDF)
+POST {{Rag.API_HostAddress}}/documents
+Content-Type: multipart/form-data; boundary=RagBoundary
+
+--RagBoundary
+Content-Disposition: form-data; name="file"; filename="sample.pdf"
+Content-Type: application/pdf
+
+< ../sample.pdf
+--RagBoundary--
+
+### List all documents
+GET {{Rag.API_HostAddress}}/documents
 Accept: application/json
 
-###
+### Get a document by id
+GET {{Rag.API_HostAddress}}/documents/{{documentId}}
+Accept: application/json
+
+### Delete a document by id
+DELETE {{Rag.API_HostAddress}}/documents/{{documentId}}
+
+### Ask a question
+POST {{Rag.API_HostAddress}}/query
+Content-Type: application/json
+
+{
+  "question": "What is the standard working week?"
+}

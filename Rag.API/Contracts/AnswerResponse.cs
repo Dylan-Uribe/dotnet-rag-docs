@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Contracts;
+namespace Rag.API.Contracts;
 
 public sealed record AnswerResponse(
     string Answer,

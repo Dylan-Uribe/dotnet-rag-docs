@@ -1,27 +1,23 @@
-﻿using Microsoft.Extensions.Options;
-using Rag.API.Options;
-using Microsoft.ML.Tokenizers;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.ML.Tokenizers;
+using Rag.API.Options;
 
 namespace Rag.API.Ingestion;
 
-public class RecursiveChunker : IChunker
+public sealed class RecursiveChunker(
+    IOptions<RagOptions> options,
+    Tokenizer tokenizer) : IChunker
 {
-    private readonly int _chunkSize;
-    private readonly int _chunkOverlap;
-    private readonly Tokenizer _tokenizer;
+    private readonly int _chunkSize = options.Value.ChunkSizeTokens;
+    private readonly int _chunkOverlap = options.Value.ChunkOverlapTokens;
     private readonly string[] _separators = ["\n\n", "\n", ". ", " "];
-    public RecursiveChunker(IOptions<RagOptions> options, Tokenizer tokenizer)
-    {
-        _chunkSize = options.Value.ChunkSizeTokens;
-        _chunkOverlap = options.Value.ChunkOverlapTokens;
-        _tokenizer = tokenizer;
-    }
+
     public IReadOnlyList<TextChunk> Chunk(string pageText, int pageNumber)
     {
         var chunks = new List<TextChunk>();
 
-        if (string.IsNullOrWhiteSpace(pageText)) 
+        if (string.IsNullOrWhiteSpace(pageText))
         {
             return chunks;
         }
@@ -33,7 +29,7 @@ public class RecursiveChunker : IChunker
 
     private void SplitRecursively(string text, int pageNumber, int separatorIndex, List<TextChunk> chunks)
     {
-        if (_tokenizer.CountTokens(text) <= _chunkSize)
+        if (tokenizer.CountTokens(text) <= _chunkSize)
         {
             chunks.Add(new TextChunk(text.Trim(), pageNumber));
             return;
@@ -88,7 +84,7 @@ public class RecursiveChunker : IChunker
             builderTokens = 0;
             currentParts.Clear();
 
-            foreach (var part in carried)
+            foreach ((string Text, int Tokens) part in carried)
             {
                 builder.Append(part.Text).Append(separator);
                 builderTokens += part.Tokens;
@@ -100,7 +96,7 @@ public class RecursiveChunker : IChunker
         {
             if (string.IsNullOrWhiteSpace(part)) continue;
 
-            int partTokens = _tokenizer.CountTokens(part);
+            int partTokens = tokenizer.CountTokens(part);
 
             if (partTokens > _chunkSize)
             {
@@ -109,13 +105,13 @@ public class RecursiveChunker : IChunker
                 continue;
             }
 
-            if (builderTokens + partTokens > _chunkSize) 
+            if (builderTokens + partTokens > _chunkSize)
             {
                 SealChunk(carryOverlap: true);
             }
 
             builder.Append(part).Append(separator);
-            currentParts.Add((part,partTokens));
+            currentParts.Add((part, partTokens));
             builderTokens += partTokens;
         }
 

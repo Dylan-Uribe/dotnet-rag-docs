@@ -1,8 +1,9 @@
-﻿namespace Rag.API.Ingestion;
+using Rag.API.Common;
+using Rag.API.Contracts;
+
+namespace Rag.API.Ingestion;
 
 public interface IIngestionService
 {
-    Task<IngestionResult> IngestAsync(Stream documentStream, string fileName);
+    Task<Result<IngestResponse>> IngestAsync(Stream documentStream, string fileName);
 }
-
-public sealed record IngestionResult(Guid DocumentId, int PageCount, int ChunkCount);

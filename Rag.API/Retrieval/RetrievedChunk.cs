@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Retrieval;
+namespace Rag.API.Retrieval;
 
 public sealed record RetrievedChunk(
     string FileName,

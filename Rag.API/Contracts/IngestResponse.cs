@@ -1,7 +1,7 @@
-﻿namespace Rag.API.Contracts;
+namespace Rag.API.Contracts;
 
 public sealed record IngestResponse(
-    Guid DocumentId, 
-    int PageCount, 
+    Guid DocumentId,
+    int PageCount,
     int ChunkCount
 );

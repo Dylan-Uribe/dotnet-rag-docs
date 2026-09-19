@@ -1,52 +1,61 @@
-﻿using Pgvector;
+using Pgvector;
+using Rag.API.Common;
+using Rag.API.Contracts;
 using Rag.API.Data;
 using Rag.API.Domain;
 using Rag.API.Embeddings;
 
 namespace Rag.API.Ingestion;
 
-public class IngestionService : IIngestionService
+public sealed class IngestionService(
+    IEnumerable<IDocumentParser> parsers,
+    IChunker chunker,
+    IEmbeddingService embeddings,
+    ApplicationDbContext context) : IIngestionService
 {
-    private readonly IDocumentParser _parser;
-    private readonly IChunker _chunker;
-    private readonly IEmbeddingService _embeddings;
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IReadOnlyList<IDocumentParser> _parsers = parsers.ToList();
 
-    public IngestionService(
-        IDocumentParser parser, 
-        IChunker chunker, 
-        IEmbeddingService embeddings,
-        ApplicationDbContext db) 
+    public async Task<Result<IngestResponse>> IngestAsync(Stream documentStream, string fileName)
     {
-        _parser = parser;
-        _chunker = chunker;
-        _embeddings = embeddings;
-        _dbContext = db;
-    }
+        string extension = Path.GetExtension(fileName).ToLowerInvariant();
 
-    public async Task<IngestionResult> IngestAsync(Stream documentStream, string fileName)
-    {
-        var pages = _parser.Parse(documentStream);
+        IDocumentParser? parser = _parsers.FirstOrDefault(
+            p => p.SupportedExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase));
 
-        var chunks = new List<TextChunk>();
-
-        foreach (var page in pages) 
+        if (parser is null)
         {
-            chunks.AddRange(_chunker.Chunk(page.Text, page.PageNumber));
+            return Result<IngestResponse>.Failure(new Error(
+                ErrorType.UnsupportedType,
+                $"No parser is registered for '{extension}' files."));
         }
+
+        IReadOnlyList<PageText> pages = parser.Parse(documentStream);
+
+        if (pages.Count == 0)
+        {
+            return Result<IngestResponse>.Failure(new Error(
+                ErrorType.Unprocessable,
+                "No extractable text was found in the document. " +
+                "It is likely a scanned PDF with no text layer and would require OCR."));
+        }
+
+        var chunks = pages
+            .SelectMany(page => chunker.Chunk(page.Text, page.PageNumber))
+            .ToList();
 
         if (chunks.Count == 0)
         {
-            throw new InvalidOperationException(
-                $"'{fileName}' produced no chunks.");
+            return Result<IngestResponse>.Failure(new Error(
+                ErrorType.Unprocessable,
+                $"'{fileName}' produced no chunks."));
         }
 
         var texts = chunks.Select(chunk => chunk.Text).ToList();
-        var vectors = await _embeddings.EmbedAsync(texts);
+        IReadOnlyList<float[]> vectors = await embeddings.EmbedAsync(texts);
 
         var document = new Document
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.CreateVersion7(),
             Name = fileName,
             IngestedAt = DateTime.UtcNow
         };
@@ -55,18 +64,17 @@ public class IngestionService : IIngestionService
         {
             document.DocumentChunks.Add(new DocumentChunk
             {
-                Id = Guid.NewGuid(),
-                DocumentId = document.Id,
+                Id = Guid.CreateVersion7(),
                 TextContent = chunks[i].Text,
                 PageNumber = chunks[i].PageNumber,
                 Embedding = new Vector(vectors[i])
             });
         }
 
-        _dbContext.Documents.Add(document);
-        await _dbContext.SaveChangesAsync();
+        context.Documents.Add(document);
+        await context.SaveChangesAsync();
 
-        return new IngestionResult(document.Id, pages.Count, chunks.Count);
-
+        return Result<IngestResponse>.Success(
+            new IngestResponse(document.Id, pages.Count, chunks.Count));
     }
 }

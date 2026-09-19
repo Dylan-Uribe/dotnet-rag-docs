@@ -1,4 +1,4 @@
-﻿namespace Rag.API.Domain;
+namespace Rag.API.Domain;
 
 public sealed class Document
 {

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Pgvector;
 using Pgvector.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using Rag.API.Options;
 namespace Rag.API.Retrieval;
 
 public sealed class VectorRetriever(
-    ApplicationDbContext db,
+    ApplicationDbContext context,
     IEmbeddingService embeddings,
     IOptions<RagOptions> options) : IRetriever
 {
@@ -17,10 +17,10 @@ public sealed class VectorRetriever(
 
     public async Task<IReadOnlyList<RetrievedChunk>> RetrieveAsync(string question)
     {
-        var vectors = await embeddings.EmbedAsync([question]);
+        IReadOnlyList<float[]> vectors = await embeddings.EmbedAsync([question]);
         var queryVector = new Vector(vectors[0]);
 
-        var candidates = await db.DocumentChunks
+        List<RetrievedChunk> candidates = await context.DocumentChunks
             .OrderBy(chunk => chunk.Embedding.CosineDistance(queryVector))
             .Take(_options.TopK)
             .Select(chunk => new RetrievedChunk(
@@ -30,7 +30,7 @@ public sealed class VectorRetriever(
                 chunk.Embedding.CosineDistance(queryVector)))
             .ToListAsync();
 
-        if (_options.MaxDistance.HasValue) 
+        if (_options.MaxDistance.HasValue)
         {
             double max = _options.MaxDistance.Value;
             return candidates.Where(chunk => chunk.Distance <= max).ToList();

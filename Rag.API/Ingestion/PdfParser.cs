@@ -1,5 +1,6 @@
-﻿using System.Text;
+using System.Text;
 using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
 namespace Rag.API.Ingestion;
@@ -9,6 +10,8 @@ public sealed class PdfParser : IDocumentParser
     private const double FullWidthPercentile = 0.90;
     private const int WordSlack = 12;
 
+    public IReadOnlyCollection<string> SupportedExtensions { get; } = [".pdf"];
+
     public IReadOnlyList<PageText> Parse(Stream documentStream)
     {
         ArgumentNullException.ThrowIfNull(documentStream);
@@ -17,21 +20,14 @@ public sealed class PdfParser : IDocumentParser
 
         using var document = PdfDocument.Open(documentStream);
 
-        foreach (var page in document.GetPages())
+        foreach (Page page in document.GetPages())
         {
-            var raw = ContentOrderTextExtractor.GetText(page);
-            var text = NormalizeParagraphs(raw);
+            string raw = ContentOrderTextExtractor.GetText(page);
+            string text = NormalizeParagraphs(raw);
 
             if (string.IsNullOrWhiteSpace(text)) continue;
 
             pages.Add(new PageText(text, page.Number));
-        }
-
-        if (pages.Count == 0)
-        {
-            throw new InvalidOperationException(
-                "No extractable text was found in the document. " +
-                "It is likely a scanned PDF with no text layer and would require OCR.");
         }
 
         return pages;
@@ -41,7 +37,7 @@ public sealed class PdfParser : IDocumentParser
     {
         if (string.IsNullOrWhiteSpace(pageText)) return string.Empty;
 
-        var lines = pageText
+        string[] lines = pageText
             .Replace("\r\n", "\n")
             .Replace('\r', '\n')
             .Split('\n')
