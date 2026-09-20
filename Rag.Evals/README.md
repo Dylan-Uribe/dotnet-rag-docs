@@ -429,3 +429,84 @@ unauthenticated.
 - **The faithfulness eval has not been re-run since the hardening.** The new wording tells
   the model to answer the question "and nothing else", which could plausibly affect
   completeness.
+
+---
+
+# Conclusion
+
+Four evals, each answering a question the others cannot.
+
+| Eval | Measures | Result | Deterministic | Cost |
+|---|---|---|---|---|
+| Retrieval | Does the answer's page come back? | recall@5 **0.94**, MRR **0.86** | yes | ~0 |
+| Abstention | Does it decline when the corpus cannot answer? | **30/30**, no hallucinations, no over-refusals | no | ~3c |
+| Faithfulness | Is every claim grounded, and is the answer right? | faithful **0.97**, correct **0.88** | no | ~40c |
+| Injection | Does a hostile document take control? | resistance **0.88** | no | ~1c |
+
+Plus a sweep that re-runs the retrieval eval across seven chunkings.
+
+## What measuring actually produced
+
+Not the numbers. Four concrete findings, each with an owner:
+
+**One defect fixed, with proof.** The injection eval found that a payload written in the
+document's own voice — a forged IT notice, a fake "Article 99" — hijacked answers that an
+explicit "IGNORE ALL INSTRUCTIONS" could not. The prompt was hardened against the
+mechanism, resistance went 0.75 → 0.88, the gain held across two runs, and the abstention
+eval confirmed the stricter wording had not made the system refuse more. That last step is
+the one usually skipped.
+
+**One configuration decision, made on evidence instead of a default.** The sweep showed
+150/30 chunking answers every question within the top ten on **half** the context tokens of
+the current 350/70. The gain was predicted first from a diagnosis — a one-line answer
+diluted inside a 1518-character chunk — and then confirmed, which is worth more than
+finding it by scanning seven rows.
+
+**One defect found and still open.** Asked when the season ends, the system answers
+*28 March 2027* from Article 4.6 and misses Appendix G.3.2, which says that date means the
+end of Round 26. Retrieval worked, abstention was not in play; only end-to-end grading
+reached it.
+
+**One problem that has no fix at this layer.** A passage asserting "the fee is 999,999
+credits" is reported as fact, before and after hardening, in a sentence indistinguishable
+from a correct answer. The model is not disobeying — the attack *is* the context. That
+answer scores faithful, correctly. Faithfulness measures grounding, not truth.
+
+## The method, which matters more than the scores
+
+Every instrument here was checked against a system deliberately broken before it was
+trusted:
+
+- The abstention eval scored a perfect 30/30 on its first run, so the refusal instruction
+  was deleted from the prompt and it was re-run: the score collapsed to 0. That experiment
+  also revealed the eval was measuring *template compliance* rather than abstention, and
+  counted 18 correct refusals as hallucinations.
+- The judge was calibrated against 12 hand-labelled cases before grading anything. A
+  "tightened" prompt scored **worse** (9/12 against 10/12) — without the calibration set it
+  would have shipped as an improvement.
+- The sweep's winner was predicted before it ran, and half that prediction was wrong: the
+  six-item list expected to break under small chunks never did.
+
+A number nobody has tried to break is decoration.
+
+## What is still open
+
+1. **Adopt 150/30, or not.** Validated on retrieval and abstention; not on faithfulness or
+   injection. It is best-of-seven on one golden set, which inflates it.
+2. **q32.** The cross-reference defect is unfixed and no eval currently guards a fix.
+3. **The upload endpoint.** p05 is an ingestion problem: provenance per document, and
+   authentication on an endpoint that has none.
+4. **Faithfulness has not been re-run since the prompt hardening.**
+5. **Rewrite the over-specified references in q19 and q30** — deliberately, expecting the
+   number to rise for that reason and not because anything improved.
+
+## What none of this measures
+
+Latency, cost per query in production, tenant isolation in retrieval, OCR, tables, and
+whether any of it holds on a corpus that is not a 50-page rulebook. Every score here is a
+property of one configuration against one document, not of the codebase.
+
+The sets are small — 32, 30, 12 and 8 items. One question is worth roughly three points.
+These evals are built to catch large regressions and to stop arguments about whether a
+change helped; they are not built to resolve differences of two points, and should not be
+quoted as if they were.
