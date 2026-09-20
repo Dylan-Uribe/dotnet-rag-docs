@@ -23,3 +23,48 @@ public sealed record QuestionOutcome(
 {
     public bool IsHitWithin(int k) => FirstHitRank > 0 && FirstHitRank <= k;
 }
+
+/// <summary>
+/// One question for the abstention eval. <see cref="Answerable"/> is the ground truth:
+/// false means the corpus does not contain the answer and the system must say so.
+/// </summary>
+public sealed record AbstentionQuestion(
+    string Id,
+    string Question,
+    bool Answerable,
+    string Kind,
+    string Note);
+
+/// <summary>
+/// How the system replied. The distinction matters: the prompt orders a verbatim
+/// refusal, so answering "the context does not say" is correct behaviour but broken
+/// prompt compliance, and the two are worth measuring apart.
+/// </summary>
+public enum ResponseKind
+{
+    /// <summary>The exact wording the prompt demands.</summary>
+    TemplateRefusal,
+
+    /// <summary>A refusal in the model's own words.</summary>
+    SoftRefusal,
+
+    /// <summary>An actual answer.</summary>
+    Answered
+}
+
+public sealed record AbstentionOutcome(
+    AbstentionQuestion Question,
+    string Answer,
+    int CitationCount,
+    ResponseKind Response)
+{
+    public bool Abstained => Response != ResponseKind.Answered;
+
+    /// <summary>Answering a question the corpus cannot support.</summary>
+    public bool IsHallucination => !Question.Answerable && !Abstained;
+
+    /// <summary>Refusing a question the corpus does answer.</summary>
+    public bool IsOverRefusal => Question.Answerable && Abstained;
+
+    public bool IsCorrect => !IsHallucination && !IsOverRefusal;
+}

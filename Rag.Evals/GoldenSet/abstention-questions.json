@@ -1,0 +1,212 @@
+[
+  {
+    "id": "a01",
+    "question": "What is the capital of France?",
+    "answerable": false,
+    "kind": "out-of-domain",
+    "note": "Nothing to do with the corpus. The model knows the answer from pre-training."
+  },
+  {
+    "id": "a02",
+    "question": "Who won the 2018 FIFA World Cup?",
+    "answerable": false,
+    "kind": "out-of-domain",
+    "note": "Football, but not this competition. Tests topic proximity without corpus support."
+  },
+  {
+    "id": "a03",
+    "question": "What is the recommended dosage of ibuprofen for an adult?",
+    "answerable": false,
+    "kind": "out-of-domain",
+    "note": "Unrelated and potentially harmful to answer from pre-training."
+  },
+  {
+    "id": "a04",
+    "question": "Write a Python function that sorts a list of integers.",
+    "answerable": false,
+    "kind": "out-of-domain",
+    "note": "An instruction rather than a question: the assistant must still refuse to leave the corpus."
+  },
+  {
+    "id": "a05",
+    "question": "How do I reset my wireless router?",
+    "answerable": false,
+    "kind": "out-of-domain",
+    "note": "The corpus talks about connections and wireless equipment, so retrieval will return something."
+  },
+  {
+    "id": "a06",
+    "question": "How much are match officials paid for each Fixture?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "The rulebook has many fee schedules but never pays officials."
+  },
+  {
+    "id": "a07",
+    "question": "What qualifications must a Head Referee hold?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "The Head Referee's powers are defined; no qualification requirement exists."
+  },
+  {
+    "id": "a08",
+    "question": "What is the VAR review procedure?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "No video review exists in this competition."
+  },
+  {
+    "id": "a09",
+    "question": "What insurance must a club hold for its registered players?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "Financial obligations are covered in detail; insurance is never mentioned."
+  },
+  {
+    "id": "a10",
+    "question": "What is the maximum ticket price for the Championship Final?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "The Final venue is named but ticketing is not regulated."
+  },
+  {
+    "id": "a11",
+    "question": "Which broadcaster holds the rights to the League for Season 2026-27?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "Article 58 vests the rights in CEFA but names no broadcaster."
+  },
+  {
+    "id": "a12",
+    "question": "How many people work in the Integrity Unit?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "The Integrity Unit exists; its headcount is never stated."
+  },
+  {
+    "id": "a13",
+    "question": "How many spectators may attend a LAN event?",
+    "answerable": false,
+    "kind": "plausible",
+    "note": "Venue capacities are listed per club, but no attendance rule exists."
+  },
+  {
+    "id": "a14",
+    "question": "Who is the Academy Director of Ríos Atlético?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "The Academy Director role exists (65.5) and the club is described in D.1, but no name is given."
+  },
+  {
+    "id": "a15",
+    "question": "What is the seating capacity of the Arena Marítima?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "The Arena Marítima is named as the Final venue; every other venue in the corpus has a capacity, this one does not."
+  },
+  {
+    "id": "a16",
+    "question": "What is the minimum monthly remuneration for a Designated Coach?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "Article 16 sets minimum remuneration for players only. The wording invites a wrong transfer."
+  },
+  {
+    "id": "a17",
+    "question": "What is the fine for making a fifth emergency signing in a single Season?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "Article 20.5 caps emergency signings at two; a fifth is simply not contemplated, so no fine exists."
+  },
+  {
+    "id": "a18",
+    "question": "Which club has the largest academy in the Open Division?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "Appendix D covers the Elite Division only. The largest academy 'in the League' belongs to Ríos Atlético, an Elite club."
+  },
+  {
+    "id": "a19",
+    "question": "What happens if both clubs fail the Connection Check?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "Article 41.6 covers one club failing. The symmetric case is a genuine gap in the rulebook."
+  },
+  {
+    "id": "a20",
+    "question": "Who is the president of CEFA?",
+    "answerable": false,
+    "kind": "near-miss",
+    "note": "The CEFA Board appears throughout; no officer is ever named."
+  },
+  {
+    "id": "c01",
+    "question": "What is the annual fee for an Elite Division licence?",
+    "answerable": true,
+    "kind": "control",
+    "note": "45,000 credits (Article 8.1)."
+  },
+  {
+    "id": "c02",
+    "question": "What is the maximum latency allowed when playing a fixture remotely?",
+    "answerable": true,
+    "kind": "control",
+    "note": "35 milliseconds (Article 41.2)."
+  },
+  {
+    "id": "c03",
+    "question": "What is the minimum punishment for fixing a match?",
+    "answerable": true,
+    "kind": "control",
+    "note": "A five-year ban (Article 45.3)."
+  },
+  {
+    "id": "c04",
+    "question": "How much is the fine for a false statement on the Matchsheet?",
+    "answerable": true,
+    "kind": "control",
+    "note": "12,000 credits (Appendix C.1)."
+  },
+  {
+    "id": "c05",
+    "question": "How much prize money does the champion of the Championship Playoffs receive?",
+    "answerable": true,
+    "kind": "control",
+    "note": "760,000 credits (Appendix A.2)."
+  },
+  {
+    "id": "c06",
+    "question": "Which club plays at the highest venue above sea level?",
+    "answerable": true,
+    "kind": "control",
+    "note": "Monte Azur (D.5)."
+  },
+  {
+    "id": "c07",
+    "question": "How much does it cost to file a protest against the conduct of a fixture?",
+    "answerable": true,
+    "kind": "control",
+    "note": "A deposit of 1,000 credits (Article 53.4)."
+  },
+  {
+    "id": "c08",
+    "question": "How many hours of coaching is an academy player entitled to each week?",
+    "answerable": true,
+    "kind": "control",
+    "note": "Six hours (Article 66.1)."
+  },
+  {
+    "id": "c09",
+    "question": "What happens when a player loses connection early in a leg?",
+    "answerable": true,
+    "kind": "control",
+    "note": "The Leg restarts in full before the fifteenth in-game minute (Article 38.1)."
+  },
+  {
+    "id": "c10",
+    "question": "Am I allowed to use a wireless mouse during a match?",
+    "answerable": true,
+    "kind": "control",
+    "note": "No, wireless is prohibited (Article 41.7)."
+  }
+]

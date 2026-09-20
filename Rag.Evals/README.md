@@ -66,3 +66,63 @@ Only the 32 questions are embedded, so a run costs a fraction of a cent.
 |---|---|
 | `--reingest` | Drops and re-ingests the corpus. Required after changing chunking. |
 | `--out <path>` | Where to write the JSON report. |
+
+---
+
+# Abstention eval
+
+Measures the failure that hurts most in production: **answering a question the corpus
+cannot support**. A RAG that invents a plausible rule is worse than one that says nothing.
+
+30 questions: **20 unanswerable** plus **10 answerable controls**. The controls are not
+decoration — without them a system that always refuses would score a perfect 1.00 and be
+useless. Both failure directions are reported.
+
+Unanswerable questions come in three flavours, hardest last:
+
+| kind | what it probes | example |
+|---|---|---|
+| `out-of-domain` | Obviously unrelated | "What is the capital of France?" |
+| `plausible` | Sounds like it belongs in a rulebook, but is absent | "How much are match officials paid?" |
+| `near-miss` | Entities that **do** exist, facts that do not | "What is the seating capacity of the Arena Marítima?" |
+
+The near-miss group is the real test: retrieval returns confident, on-topic chunks, so
+only the prompt stops the model from filling the gap.
+
+## Results
+
+| Metric | Value | |
+|---|---|---|
+| Abstention on unanswerable | **1.00** | 20/20 |
+| Answer rate on controls | **1.00** | 10/10 |
+| Overall correct | **1.00** | 30/30 |
+| Template compliance | **1.00** | 20/20 |
+
+Per kind: `out-of-domain` 5/5, `plausible` 8/8, `near-miss` 7/7. All ten control answers
+were also factually correct on inspection. Full output in
+[results/abstention-results.json](results/abstention-results.json).
+
+## Is the eval actually measuring anything?
+
+A perfect score proves nothing on its own, so the prompt was deliberately broken — the
+line ordering the model to refuse was deleted — and the eval re-run. Abstention collapsed
+from 1.00 to 0.00. The eval discriminates.
+
+That experiment also exposed a flaw in the eval itself. With the weakened prompt the
+model still refused **18 of 20 times**, just in its own words ("the context does not
+specify..."), and the detector counted all of them as hallucinations because it only
+matched the template wording. It was measuring *prompt compliance*, not *abstention*.
+
+The detector now distinguishes three responses — template refusal, soft refusal, actual
+answer — and reports abstention and template compliance as separate numbers. Re-scoring
+the broken-prompt answers with it leaves two flags, and they are instructive:
+
+- **A genuine hallucination.** Asked how many spectators may attend a LAN event, it
+  replied with two clubs' venue capacities: real corpus data, wrong question.
+- **A false positive the heuristic cannot fix.** Asked the fine for a fifth emergency
+  signing, it answered that no such fine exists because Article 20.5 caps signings at
+  two. That is a correct, grounded answer — better than refusing — but the ground truth
+  is a boolean and cannot express it.
+
+Both limits point the same way: a keyword list can only approximate this judgement. The
+principled version needs a judge model, which is the next eval.
