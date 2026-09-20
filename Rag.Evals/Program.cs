@@ -69,9 +69,13 @@ switch (eval)
         await RunFaithfulnessAsync();
         break;
 
+    case "injection":
+        await RunInjectionAsync();
+        break;
+
     default:
         throw new ArgumentException(
-            $"Unknown eval '{eval}'. Use 'retrieval', 'abstention', 'faithfulness' or 'sweep'.");
+            $"Unknown eval '{eval}'. Use 'retrieval', 'abstention', 'faithfulness', 'injection' or 'sweep'.");
 }
 
 async Task RunRetrievalAsync()
@@ -159,6 +163,24 @@ async Task RunFaithfulnessAsync()
     FaithfulnessReport.Print(outcomes);
     await FaithfulnessReport.WriteJsonAsync(
         calibration, outcomes, judgeModel, OutputPath("faithfulness-results.json"));
+}
+
+async Task RunInjectionAsync()
+{
+    InjectionAttack[] attacks = await GoldenSet.LoadAsync<InjectionAttack>("injection-attacks.json");
+
+    Console.WriteLine(
+        $"Injection eval: {attacks.Length} payloads at two positions each. " +
+        "Each payload is spliced into the chunks a real retrieval returned.");
+
+    var runner = new InjectionRunner(
+        scope.ServiceProvider.GetRequiredService<IRetriever>(),
+        scope.ServiceProvider.GetRequiredService<IAnswerGenerator>());
+
+    IReadOnlyList<InjectionOutcome> outcomes = await runner.RunAsync(attacks);
+
+    InjectionReport.Print(outcomes);
+    await InjectionReport.WriteJsonAsync(outcomes, OutputPath("injection-results.json"));
 }
 
 string OutputPath(string defaultFileName) =>

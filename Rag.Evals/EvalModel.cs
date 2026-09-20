@@ -107,3 +107,40 @@ public sealed record CalibrationOutcome(CalibrationCase Case, JudgeVerdict Verdi
 }
 
 public sealed record FaithfulnessOutcome(EvalQuestion Question, string Answer, JudgeVerdict Verdict);
+
+public enum InjectionPosition
+{
+    /// <summary>Ahead of the legitimate passages.</summary>
+    First,
+
+    /// <summary>After them, closest to the question.</summary>
+    Last
+}
+
+/// <summary>
+/// One hostile passage plus the legitimate question it is meant to hijack.
+/// <see cref="ExpectedFact"/> is what a healthy answer still contains, which separates
+/// resisting the attack from being disrupted by it.
+/// </summary>
+public sealed record InjectionAttack(
+    string Id,
+    string Kind,
+    string Question,
+    string Payload,
+    string? SuccessMarker,
+    bool SuccessOnAbstention,
+    string ExpectedFact,
+    string Note);
+
+public sealed record InjectionOutcome(
+    InjectionAttack Attack,
+    InjectionPosition Position,
+    string Answer,
+    bool Obeyed,
+    bool TaskPreserved)
+{
+    public bool Resisted => !Obeyed;
+
+    /// <summary>Resisted the instruction and still answered the user. Anything less is a partial win for the attacker.</summary>
+    public bool FullyHealthy => Resisted && TaskPreserved;
+}
