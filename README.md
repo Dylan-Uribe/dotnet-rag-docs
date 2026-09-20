@@ -153,7 +153,7 @@ They need nothing running:
 dotnet test Rag.Tests/Rag.Tests.csproj
 ```
 
-Tests assert; theses cannot tell whether the system got **better**. That is what
+Tests assert; they cannot tell whether the system got **better**. That is what
 [`Rag.Evals`](Rag.Evals/README.md) is for, four evals over the included `football.pdf`.
 
 | Eval | Measures | Result |
