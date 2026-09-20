@@ -1,0 +1,226 @@
+[
+  {
+    "id": "q01",
+    "question": "How long does a player have to show up in the lobby before the match is lost?",
+    "expectedPages": [5, 44, 49],
+    "kind": "semantic",
+    "answer": "A grace period of eight minutes (Article 6.8)."
+  },
+  {
+    "id": "q02",
+    "question": "What is the annual fee for an Elite Division licence?",
+    "expectedPages": [6],
+    "kind": "numeric",
+    "answer": "45,000 credits (Article 8.1)."
+  },
+  {
+    "id": "q03",
+    "question": "How much money must an Elite Division club keep in its Financial Reserve?",
+    "expectedPages": [6],
+    "kind": "numeric",
+    "answer": "Not less than 120,000 credits (Article 9.1)."
+  },
+  {
+    "id": "q04",
+    "question": "Can the same player be signed by two different clubs at the same time?",
+    "expectedPages": [8],
+    "kind": "semantic",
+    "answer": "No. A player may be registered to only one club at any time (Article 13.3)."
+  },
+  {
+    "id": "q05",
+    "question": "What is the minimum monthly salary in the Open Division?",
+    "expectedPages": [9],
+    "kind": "numeric",
+    "answer": "900 credits (Article 16.5)."
+  },
+  {
+    "id": "q06",
+    "question": "When does the Secondary Transfer Window open and close?",
+    "expectedPages": [9, 48],
+    "kind": "numeric",
+    "answer": "It opens on 27 December and closes on 14 January (Article 17.2)."
+  },
+  {
+    "id": "q07",
+    "question": "How many players can a club buy during one transfer window?",
+    "expectedPages": [10],
+    "kind": "semantic",
+    "answer": "Not more than four (Article 18.4)."
+  },
+  {
+    "id": "q08",
+    "question": "What happens if injuries leave a team with fewer players than the rules require?",
+    "expectedPages": [8, 48],
+    "kind": "semantic",
+    "answer": "The roster must be restored within 28 days, otherwise fixtures are forfeit (Articles 14.6 and 14.7)."
+  },
+  {
+    "id": "q09",
+    "question": "What is the highest number of points a club can take from a single fixture?",
+    "expectedPages": [12],
+    "kind": "semantic",
+    "answer": "Four: three for the win plus one bonus point for winning both Legs (Article 26.4)."
+  },
+  {
+    "id": "q10",
+    "question": "What score is recorded when a club forfeits an entire fixture?",
+    "expectedPages": [13],
+    "kind": "semantic",
+    "answer": "A 6-0 aggregate defeat (Article 30.2)."
+  },
+  {
+    "id": "q11",
+    "question": "If two clubs finish the season on the same number of points, how is the tie broken?",
+    "expectedPages": [13, 14],
+    "kind": "semantic",
+    "answer": "By goal difference, then goals scored, then head-to-head, then fixtures won outright, then disciplinary points (Article 31)."
+  },
+  {
+    "id": "q12",
+    "question": "Where will the 2026-27 championship final be played?",
+    "expectedPages": [15],
+    "kind": "entity",
+    "answer": "On LAN at the Arena Marítima, Valmora (Article 32.5)."
+  },
+  {
+    "id": "q13",
+    "question": "What happens when a player loses connection early in a leg?",
+    "expectedPages": [17],
+    "kind": "semantic",
+    "answer": "Before the fifteenth in-game minute the Leg is restarted in full with the score reset (Article 38.1)."
+  },
+  {
+    "id": "q14",
+    "question": "What is the maximum latency allowed when playing a fixture remotely?",
+    "expectedPages": [18],
+    "kind": "numeric",
+    "answer": "35 milliseconds to the designated server region (Article 41.2)."
+  },
+  {
+    "id": "q15",
+    "question": "Am I allowed to use a wireless mouse during a match?",
+    "expectedPages": [18],
+    "kind": "semantic",
+    "answer": "No. Wireless connection of any component of the playing setup is prohibited (Article 41.7)."
+  },
+  {
+    "id": "q16",
+    "question": "How long before the final can the game version no longer be changed?",
+    "expectedPages": [19, 49],
+    "kind": "semantic",
+    "answer": "A Patch Freeze operates in the fourteen days preceding the Final (Article 43.4)."
+  },
+  {
+    "id": "q17",
+    "question": "What is the minimum punishment for fixing a match?",
+    "expectedPages": [21, 37],
+    "kind": "semantic",
+    "answer": "A five-year ban from all CEFA activity (Article 45.3)."
+  },
+  {
+    "id": "q18",
+    "question": "Can a player bet on a match in the division he does not play in?",
+    "expectedPages": [21],
+    "kind": "semantic",
+    "answer": "No. The prohibition applies irrespective of the club or division concerned (Article 46.2)."
+  },
+  {
+    "id": "q19",
+    "question": "How much is the fine for a false statement on the Matchsheet?",
+    "expectedPages": [36],
+    "kind": "numeric",
+    "answer": "12,000 credits and forfeiture of the Fixture (Appendix C.1)."
+  },
+  {
+    "id": "q20",
+    "question": "How much prize money does the champion of the Championship Playoffs receive?",
+    "expectedPages": [32],
+    "kind": "numeric",
+    "answer": "760,000 credits (Appendix A.2)."
+  },
+  {
+    "id": "q21",
+    "question": "Who scored the most goals in a single Elite Division regular season?",
+    "expectedPages": [35],
+    "kind": "entity",
+    "answer": "Nahuel Ferrada of Puerto Halcón, with 61 goals in Season 2022-23 (B.4.3)."
+  },
+  {
+    "id": "q22",
+    "question": "Which club plays at the highest venue above sea level?",
+    "expectedPages": [38],
+    "kind": "entity",
+    "answer": "Monte Azur, at the Sala Altura, 2,840 metres above sea level (D.5)."
+  },
+  {
+    "id": "q23",
+    "question": "Who is the head coach that has been in the job the longest?",
+    "expectedPages": [39],
+    "kind": "entity",
+    "answer": "Verónica Castell of Sierra Bravo, appointed in 2021 (D.8)."
+  },
+  {
+    "id": "q24",
+    "question": "Which build of the game is used for the opening match window of the season?",
+    "expectedPages": [19, 41],
+    "kind": "lexical",
+    "answer": "Version 26.2.1 (Article 42.2 and E.6)."
+  },
+  {
+    "id": "q25",
+    "question": "What did version 26.1.0 change?",
+    "expectedPages": [41],
+    "kind": "lexical",
+    "answer": "Corner kick accuracy reduced by six per cent, defensive line height adjustable during play, fatigue recovery standardised, two Tactical Presets exploits closed (E.4)."
+  },
+  {
+    "id": "q26",
+    "question": "How much does it cost to file a protest against the conduct of a fixture?",
+    "expectedPages": [24],
+    "kind": "numeric",
+    "answer": "A deposit of 1,000 credits, refunded if the protest succeeds (Article 53.4)."
+  },
+  {
+    "id": "q27",
+    "question": "How quickly must the Appeals Panel rule when the make-up of a competition is at stake?",
+    "expectedPages": [24, 49],
+    "kind": "semantic",
+    "answer": "Within four days (Article 54.6)."
+  },
+  {
+    "id": "q28",
+    "question": "How many hours of coaching is an academy player entitled to each week?",
+    "expectedPages": [29],
+    "kind": "numeric",
+    "answer": "A minimum of six hours of structured coaching per week (Article 66.1)."
+  },
+  {
+    "id": "q29",
+    "question": "Where does the money collected from fines end up?",
+    "expectedPages": [28, 30, 43],
+    "kind": "semantic",
+    "answer": "In the Academy Development Fund (Articles 63.5 and 67.2)."
+  },
+  {
+    "id": "q30",
+    "question": "What does Article 24 deal with?",
+    "expectedPages": [11],
+    "kind": "lexical",
+    "answer": "The registration embargo: its effect, grounds and duration."
+  },
+  {
+    "id": "q31",
+    "question": "Which article governs timeouts in knockout competition?",
+    "expectedPages": [17, 18],
+    "kind": "lexical",
+    "answer": "Article 39 (39.4 to 39.7)."
+  },
+  {
+    "id": "q32",
+    "question": "On what date does the Elite Division regular season actually end?",
+    "expectedPages": [4, 47],
+    "kind": "cross-reference",
+    "answer": "Round 30 opens on 24 April 2027; Article 4.6 says 28 March 2027 but Appendix G.3.2 reads that as the end of Round 26 and G.3.3 makes the appendix prevail."
+  }
+]
