@@ -1,0 +1,1120 @@
+{
+  "runAtUtc": "2026-09-20T05:34:17.489452Z",
+  "topK": 10,
+  "questionCount": 32,
+  "overall": {
+    "recall@1": 0.8125,
+    "recall@3": 0.9062,
+    "recall@5": 0.9375,
+    "recall@10": 0.9688,
+    "mrr": 0.8635
+  },
+  "byKind": {
+    "cross-reference": {
+      "recall@1": 1,
+      "recall@3": 1,
+      "recall@5": 1,
+      "recall@10": 1,
+      "mrr": 1
+    },
+    "entity": {
+      "recall@1": 0.75,
+      "recall@3": 1,
+      "recall@5": 1,
+      "recall@10": 1,
+      "mrr": 0.875
+    },
+    "lexical": {
+      "recall@1": 1,
+      "recall@3": 1,
+      "recall@5": 1,
+      "recall@10": 1,
+      "mrr": 1
+    },
+    "numeric": {
+      "recall@1": 0.8889,
+      "recall@3": 0.8889,
+      "recall@5": 0.8889,
+      "recall@10": 0.8889,
+      "mrr": 0.8889
+    },
+    "semantic": {
+      "recall@1": 0.7143,
+      "recall@3": 0.8571,
+      "recall@5": 0.9286,
+      "recall@10": 1,
+      "mrr": 0.7952
+    }
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "kind": "semantic",
+      "question": "How long does a player have to show up in the lobby before the match is lost?",
+      "expectedPages": [
+        5,
+        44,
+        49
+      ],
+      "retrievedPages": [
+        17,
+        17,
+        49,
+        7,
+        18,
+        16,
+        13,
+        37,
+        5,
+        49
+      ],
+      "firstHitRank": 3,
+      "distances": [
+        0.5806,
+        0.6134,
+        0.6259,
+        0.6454,
+        0.6559,
+        0.6574,
+        0.6701,
+        0.688,
+        0.6883,
+        0.689
+      ]
+    },
+    {
+      "id": "q02",
+      "kind": "numeric",
+      "question": "What is the annual fee for an Elite Division licence?",
+      "expectedPages": [
+        6
+      ],
+      "retrievedPages": [
+        6,
+        6,
+        28,
+        28,
+        4,
+        32,
+        8,
+        4,
+        43,
+        31
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4004,
+        0.422,
+        0.4786,
+        0.4797,
+        0.5155,
+        0.5195,
+        0.5388,
+        0.5391,
+        0.5436,
+        0.5563
+      ]
+    },
+    {
+      "id": "q03",
+      "kind": "numeric",
+      "question": "How much money must an Elite Division club keep in its Financial Reserve?",
+      "expectedPages": [
+        6
+      ],
+      "retrievedPages": [
+        6,
+        32,
+        43,
+        28,
+        28,
+        8,
+        4,
+        4,
+        6,
+        39
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.2878,
+        0.4411,
+        0.4473,
+        0.4603,
+        0.4778,
+        0.487,
+        0.4963,
+        0.4965,
+        0.5022,
+        0.5056
+      ]
+    },
+    {
+      "id": "q04",
+      "kind": "semantic",
+      "question": "Can the same player be signed by two different clubs at the same time?",
+      "expectedPages": [
+        8
+      ],
+      "retrievedPages": [
+        11,
+        10,
+        31,
+        10,
+        8,
+        30,
+        11,
+        9,
+        12,
+        9
+      ],
+      "firstHitRank": 5,
+      "distances": [
+        0.4871,
+        0.4935,
+        0.5106,
+        0.5309,
+        0.5774,
+        0.5778,
+        0.5845,
+        0.5921,
+        0.6004,
+        0.6044
+      ]
+    },
+    {
+      "id": "q05",
+      "kind": "numeric",
+      "question": "What is the minimum monthly salary in the Open Division?",
+      "expectedPages": [
+        9
+      ],
+      "retrievedPages": [
+        33,
+        8,
+        28,
+        28,
+        4,
+        6,
+        32,
+        30,
+        4,
+        6
+      ],
+      "firstHitRank": 0,
+      "distances": [
+        0.4881,
+        0.5098,
+        0.5415,
+        0.5701,
+        0.5758,
+        0.5764,
+        0.5801,
+        0.5804,
+        0.6123,
+        0.6256
+      ]
+    },
+    {
+      "id": "q06",
+      "kind": "numeric",
+      "question": "When does the Secondary Transfer Window open and close?",
+      "expectedPages": [
+        9,
+        48
+      ],
+      "retrievedPages": [
+        9,
+        48,
+        9,
+        10,
+        46,
+        31,
+        8,
+        10,
+        8,
+        47
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3641,
+        0.4694,
+        0.5051,
+        0.5444,
+        0.5845,
+        0.595,
+        0.6055,
+        0.6189,
+        0.6275,
+        0.6306
+      ]
+    },
+    {
+      "id": "q07",
+      "kind": "semantic",
+      "question": "How many players can a club buy during one transfer window?",
+      "expectedPages": [
+        10
+      ],
+      "retrievedPages": [
+        9,
+        10,
+        11,
+        9,
+        31,
+        10,
+        48,
+        8,
+        12,
+        11
+      ],
+      "firstHitRank": 2,
+      "distances": [
+        0.4273,
+        0.4603,
+        0.5317,
+        0.5334,
+        0.549,
+        0.55,
+        0.5556,
+        0.5585,
+        0.5712,
+        0.5931
+      ]
+    },
+    {
+      "id": "q08",
+      "kind": "semantic",
+      "question": "What happens if injuries leave a team with fewer players than the rules require?",
+      "expectedPages": [
+        8,
+        48
+      ],
+      "retrievedPages": [
+        8,
+        10,
+        13,
+        17,
+        13,
+        14,
+        8,
+        12,
+        10,
+        36
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5465,
+        0.5474,
+        0.5502,
+        0.562,
+        0.5681,
+        0.5718,
+        0.5735,
+        0.5736,
+        0.5756,
+        0.5792
+      ]
+    },
+    {
+      "id": "q09",
+      "kind": "semantic",
+      "question": "What is the highest number of points a club can take from a single fixture?",
+      "expectedPages": [
+        12
+      ],
+      "retrievedPages": [
+        22,
+        14,
+        13,
+        15,
+        7,
+        37,
+        17,
+        36,
+        16,
+        12
+      ],
+      "firstHitRank": 10,
+      "distances": [
+        0.4185,
+        0.4584,
+        0.4655,
+        0.501,
+        0.5058,
+        0.5073,
+        0.5206,
+        0.5288,
+        0.5321,
+        0.5389
+      ]
+    },
+    {
+      "id": "q10",
+      "kind": "semantic",
+      "question": "What score is recorded when a club forfeits an entire fixture?",
+      "expectedPages": [
+        13
+      ],
+      "retrievedPages": [
+        13,
+        22,
+        17,
+        13,
+        37,
+        36,
+        14,
+        28,
+        6,
+        44
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3499,
+        0.4849,
+        0.49,
+        0.5026,
+        0.5044,
+        0.5219,
+        0.522,
+        0.5345,
+        0.5379,
+        0.5403
+      ]
+    },
+    {
+      "id": "q11",
+      "kind": "semantic",
+      "question": "If two clubs finish the season on the same number of points, how is the tie broken?",
+      "expectedPages": [
+        13,
+        14
+      ],
+      "retrievedPages": [
+        13,
+        14,
+        15,
+        34,
+        4,
+        15,
+        22,
+        12,
+        17,
+        16
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3882,
+        0.4341,
+        0.4352,
+        0.4907,
+        0.5127,
+        0.5205,
+        0.5266,
+        0.5374,
+        0.5447,
+        0.5484
+      ]
+    },
+    {
+      "id": "q12",
+      "kind": "entity",
+      "question": "Where will the 2026-27 championship final be played?",
+      "expectedPages": [
+        15
+      ],
+      "retrievedPages": [
+        47,
+        15,
+        15,
+        42,
+        46,
+        47,
+        14,
+        4,
+        16,
+        32
+      ],
+      "firstHitRank": 2,
+      "distances": [
+        0.4748,
+        0.4869,
+        0.4933,
+        0.4988,
+        0.5013,
+        0.5163,
+        0.5169,
+        0.5222,
+        0.531,
+        0.5326
+      ]
+    },
+    {
+      "id": "q13",
+      "kind": "semantic",
+      "question": "What happens when a player loses connection early in a leg?",
+      "expectedPages": [
+        17
+      ],
+      "retrievedPages": [
+        17,
+        17,
+        18,
+        7,
+        16,
+        13,
+        20,
+        13,
+        14,
+        18
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4924,
+        0.5224,
+        0.5506,
+        0.5847,
+        0.5898,
+        0.6134,
+        0.6154,
+        0.6258,
+        0.635,
+        0.6419
+      ]
+    },
+    {
+      "id": "q14",
+      "kind": "numeric",
+      "question": "What is the maximum latency allowed when playing a fixture remotely?",
+      "expectedPages": [
+        18
+      ],
+      "retrievedPages": [
+        18,
+        18,
+        17,
+        17,
+        49,
+        7,
+        49,
+        5,
+        37,
+        16
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3753,
+        0.5554,
+        0.6006,
+        0.6058,
+        0.6074,
+        0.6296,
+        0.6487,
+        0.6615,
+        0.6738,
+        0.6782
+      ]
+    },
+    {
+      "id": "q15",
+      "kind": "semantic",
+      "question": "Am I allowed to use a wireless mouse during a match?",
+      "expectedPages": [
+        18
+      ],
+      "retrievedPages": [
+        18,
+        18,
+        17,
+        16,
+        17,
+        37,
+        22,
+        21,
+        19,
+        26
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5788,
+        0.59,
+        0.6207,
+        0.6379,
+        0.6459,
+        0.6481,
+        0.6495,
+        0.6506,
+        0.6617,
+        0.6676
+      ]
+    },
+    {
+      "id": "q16",
+      "kind": "semantic",
+      "question": "How long before the final can the game version no longer be changed?",
+      "expectedPages": [
+        19,
+        49
+      ],
+      "retrievedPages": [
+        19,
+        47,
+        49,
+        41,
+        41,
+        42,
+        19,
+        2,
+        47,
+        49
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5703,
+        0.5765,
+        0.5804,
+        0.5863,
+        0.5935,
+        0.6225,
+        0.6275,
+        0.6326,
+        0.6679,
+        0.6724
+      ]
+    },
+    {
+      "id": "q17",
+      "kind": "semantic",
+      "question": "What is the minimum punishment for fixing a match?",
+      "expectedPages": [
+        21,
+        37
+      ],
+      "retrievedPages": [
+        37,
+        22,
+        36,
+        19,
+        21,
+        49,
+        17,
+        28,
+        20,
+        13
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4266,
+        0.4718,
+        0.48,
+        0.487,
+        0.5093,
+        0.5153,
+        0.5436,
+        0.5489,
+        0.5512,
+        0.5552
+      ]
+    },
+    {
+      "id": "q18",
+      "kind": "semantic",
+      "question": "Can a player bet on a match in the division he does not play in?",
+      "expectedPages": [
+        21
+      ],
+      "retrievedPages": [
+        21,
+        21,
+        31,
+        12,
+        28,
+        8,
+        4,
+        11,
+        8,
+        6
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5322,
+        0.5597,
+        0.5824,
+        0.5845,
+        0.5874,
+        0.5911,
+        0.5919,
+        0.5962,
+        0.6023,
+        0.6029
+      ]
+    },
+    {
+      "id": "q19",
+      "kind": "numeric",
+      "question": "How much is the fine for a false statement on the Matchsheet?",
+      "expectedPages": [
+        36
+      ],
+      "retrievedPages": [
+        36,
+        37,
+        22,
+        28,
+        21,
+        21,
+        22,
+        28,
+        20,
+        9
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4377,
+        0.4629,
+        0.4674,
+        0.4833,
+        0.5163,
+        0.5443,
+        0.5488,
+        0.5787,
+        0.581,
+        0.5952
+      ]
+    },
+    {
+      "id": "q20",
+      "kind": "numeric",
+      "question": "How much prize money does the champion of the Championship Playoffs receive?",
+      "expectedPages": [
+        32
+      ],
+      "retrievedPages": [
+        32,
+        15,
+        33,
+        15,
+        28,
+        34,
+        4,
+        44,
+        4,
+        16
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.429,
+        0.5024,
+        0.5262,
+        0.5453,
+        0.61,
+        0.6264,
+        0.632,
+        0.6536,
+        0.6568,
+        0.6624
+      ]
+    },
+    {
+      "id": "q21",
+      "kind": "entity",
+      "question": "Who scored the most goals in a single Elite Division regular season?",
+      "expectedPages": [
+        35
+      ],
+      "retrievedPages": [
+        35,
+        34,
+        34,
+        4,
+        39,
+        32,
+        47,
+        4,
+        33,
+        46
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4402,
+        0.4403,
+        0.4636,
+        0.5062,
+        0.544,
+        0.5466,
+        0.5517,
+        0.5537,
+        0.5587,
+        0.5658
+      ]
+    },
+    {
+      "id": "q22",
+      "kind": "entity",
+      "question": "Which club plays at the highest venue above sea level?",
+      "expectedPages": [
+        38
+      ],
+      "retrievedPages": [
+        38,
+        39,
+        40,
+        39,
+        38,
+        35,
+        15,
+        7,
+        4,
+        4
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5067,
+        0.5465,
+        0.557,
+        0.57,
+        0.5916,
+        0.6167,
+        0.6197,
+        0.6423,
+        0.647,
+        0.6478
+      ]
+    },
+    {
+      "id": "q23",
+      "kind": "entity",
+      "question": "Who is the head coach that has been in the job the longest?",
+      "expectedPages": [
+        39
+      ],
+      "retrievedPages": [
+        39,
+        39,
+        35,
+        38,
+        38,
+        40,
+        38,
+        34,
+        29,
+        47
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.7354,
+        0.7494,
+        0.7591,
+        0.7695,
+        0.7708,
+        0.7839,
+        0.8076,
+        0.8122,
+        0.8169,
+        0.8175
+      ]
+    },
+    {
+      "id": "q24",
+      "kind": "lexical",
+      "question": "Which build of the game is used for the opening match window of the season?",
+      "expectedPages": [
+        19,
+        41
+      ],
+      "retrievedPages": [
+        41,
+        19,
+        41,
+        46,
+        3,
+        5,
+        44,
+        3,
+        4,
+        9
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.4646,
+        0.4742,
+        0.4888,
+        0.5264,
+        0.5562,
+        0.5575,
+        0.565,
+        0.5658,
+        0.5682,
+        0.5682
+      ]
+    },
+    {
+      "id": "q25",
+      "kind": "lexical",
+      "question": "What did version 26.1.0 change?",
+      "expectedPages": [
+        41
+      ],
+      "retrievedPages": [
+        41,
+        41,
+        19,
+        42,
+        19,
+        49,
+        44,
+        47,
+        45,
+        47
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.491,
+        0.6183,
+        0.6702,
+        0.6893,
+        0.7504,
+        0.7543,
+        0.7813,
+        0.7813,
+        0.784,
+        0.7845
+      ]
+    },
+    {
+      "id": "q26",
+      "kind": "numeric",
+      "question": "How much does it cost to file a protest against the conduct of a fixture?",
+      "expectedPages": [
+        24
+      ],
+      "retrievedPages": [
+        24,
+        37,
+        49,
+        49,
+        36,
+        22,
+        18,
+        19,
+        24,
+        28
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5168,
+        0.5939,
+        0.6304,
+        0.6487,
+        0.6512,
+        0.6548,
+        0.6616,
+        0.6716,
+        0.6775,
+        0.6928
+      ]
+    },
+    {
+      "id": "q27",
+      "kind": "semantic",
+      "question": "How quickly must the Appeals Panel rule when the make-up of a competition is at stake?",
+      "expectedPages": [
+        24,
+        49
+      ],
+      "retrievedPages": [
+        24,
+        24,
+        49,
+        49,
+        25,
+        19,
+        17,
+        14,
+        23,
+        3
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3523,
+        0.4669,
+        0.5001,
+        0.5008,
+        0.5385,
+        0.5617,
+        0.5702,
+        0.5723,
+        0.5809,
+        0.5814
+      ]
+    },
+    {
+      "id": "q28",
+      "kind": "numeric",
+      "question": "How many hours of coaching is an academy player entitled to each week?",
+      "expectedPages": [
+        29
+      ],
+      "retrievedPages": [
+        29,
+        29,
+        30,
+        34,
+        11,
+        34,
+        43,
+        8,
+        28,
+        3
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.3323,
+        0.458,
+        0.4621,
+        0.5104,
+        0.5382,
+        0.5479,
+        0.5579,
+        0.5633,
+        0.5718,
+        0.5724
+      ]
+    },
+    {
+      "id": "q29",
+      "kind": "semantic",
+      "question": "Where does the money collected from fines end up?",
+      "expectedPages": [
+        28,
+        30,
+        43
+      ],
+      "retrievedPages": [
+        28,
+        28,
+        22,
+        6,
+        24,
+        32,
+        37,
+        36,
+        43,
+        22
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.5498,
+        0.5945,
+        0.6428,
+        0.6581,
+        0.6659,
+        0.6745,
+        0.6845,
+        0.6913,
+        0.6919,
+        0.7055
+      ]
+    },
+    {
+      "id": "q30",
+      "kind": "lexical",
+      "question": "What does Article 24 deal with?",
+      "expectedPages": [
+        11
+      ],
+      "retrievedPages": [
+        11,
+        48,
+        10,
+        21,
+        49,
+        11,
+        16,
+        23,
+        12,
+        9
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.565,
+        0.5652,
+        0.581,
+        0.5944,
+        0.6075,
+        0.6135,
+        0.6244,
+        0.6258,
+        0.6263,
+        0.6277
+      ]
+    },
+    {
+      "id": "q31",
+      "kind": "lexical",
+      "question": "Which article governs timeouts in knockout competition?",
+      "expectedPages": [
+        17,
+        18
+      ],
+      "retrievedPages": [
+        17,
+        13,
+        16,
+        15,
+        17,
+        18,
+        49,
+        49,
+        45,
+        19
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.416,
+        0.5045,
+        0.5374,
+        0.5422,
+        0.5498,
+        0.5608,
+        0.5734,
+        0.5758,
+        0.5776,
+        0.5786
+      ]
+    },
+    {
+      "id": "q32",
+      "kind": "cross-reference",
+      "question": "On what date does the Elite Division regular season actually end?",
+      "expectedPages": [
+        4,
+        47
+      ],
+      "retrievedPages": [
+        47,
+        46,
+        4,
+        4,
+        32,
+        47,
+        8,
+        5,
+        15,
+        28
+      ],
+      "firstHitRank": 1,
+      "distances": [
+        0.2946,
+        0.4477,
+        0.4482,
+        0.4593,
+        0.466,
+        0.4771,
+        0.5235,
+        0.5285,
+        0.5371,
+        0.539
+      ]
+    }
+  ]
+}

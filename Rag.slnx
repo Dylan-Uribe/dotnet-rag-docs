@@ -3,5 +3,6 @@
     <File Path="compose.yaml" />
   </Folder>
   <Project Path="Rag.API/Rag.API.csproj" Id="24299e85-bc2b-4919-a987-9881927b7e53" />
+  <Project Path="Rag.Evals/Rag.Evals.csproj" />
   <Project Path="Rag.Tests/Rag.Tests.csproj" Id="1dc897e8-a93f-42f1-a3f9-311d4b88c61e" />
 </Solution>
