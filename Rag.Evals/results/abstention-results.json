@@ -1,5 +1,5 @@
 {
-  "runAtUtc": "2026-09-20T04:35:34.0128188Z",
+  "runAtUtc": "2026-09-20T21:58:07.5163644Z",
   "questionCount": 30,
   "abstentionRateOnUnanswerable": 1,
   "answerRateOnAnswerable": 1,
@@ -261,7 +261,7 @@
       "hallucination": false,
       "overRefusal": false,
       "citationCount": 10,
-      "answer": "The annual fee for an Elite Division licence is 45,000 credits."
+      "answer": "The annual fee for an Elite Division Licence is 45,000 credits."
     },
     {
       "id": "c02",
@@ -297,7 +297,7 @@
       "hallucination": false,
       "overRefusal": false,
       "citationCount": 10,
-      "answer": "12,000 credits."
+      "answer": "12,000"
     },
     {
       "id": "c05",
@@ -345,7 +345,7 @@
       "hallucination": false,
       "overRefusal": false,
       "citationCount": 10,
-      "answer": "A club shall provide each academy player with a minimum of six hours of structured coaching per week outside competition."
+      "answer": "An academy player is entitled to a minimum of six hours of structured coaching per week outside competition."
     },
     {
       "id": "c09",
