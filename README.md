@@ -42,6 +42,9 @@ Rag.API/
   Options/       strongly-typed configuration
   Extensions/    dependency-injection wiring
   Common/        Result type, global exception handling
+
+Rag.Tests/       unit tests
+Rag.Evals/       evaluation runner and golden sets
 ```
 
 ## Quick start (Docker)
@@ -141,8 +144,37 @@ A sample response from `/query`:
 
 Ready-made HTTP requests are also available in... [`Rag.API/Rag.API.http`](Rag.API/Rag.API.http).
 
+## Testing and evaluation
+
+66 unit tests cover chunking, PDF parsing, ingestion, embedding and answer generation.
+They need nothing running:
+
+```bash
+dotnet test Rag.Tests/Rag.Tests.csproj
+```
+
+Tests assert; theses cannot tell whether the system got **better**. That is what
+[`Rag.Evals`](Rag.Evals/README.md) is for, four evals over the included `football.pdf`.
+
+| Eval | Measures | Result |
+| --- | --- | --- |
+| Retrieval | Does the page holding the answer come back? | recall@5 `0.94`, MRR `0.86` |
+| Abstention | Does it decline when the corpus cannot answer? | `30/30` |
+| Faithfulness | Is every claim grounded, and is the answer right? | `0.97` / `0.88` |
+| Injection | Can a hostile document hijack the answer? | `0.88` resistance |
+
+```bash
+# needs Postgres running and an OpenAI key
+dotnet run --project Rag.Evals -- --eval retrieval
+```
+
+A parameter sweep re-runs the retrieval eval across chunking configurations, so
+`Rag:ChunkSizeTokens` can be chosen from measurements instead of intuition.
+
 ## Documentation
 
+- [`Rag.Evals/README.md`](Rag.Evals/README.md) — the evals in detail: how each one is
+  built, what they found, and what they do not measure.
 - [`docs/decisions.md`](docs/decisions.md) — design decisions and the reasoning
   behind them, including why the default configuration values were chosen.
 - [`docs/sample-questions.md`](docs/sample-questions.md) — sample questions for the
