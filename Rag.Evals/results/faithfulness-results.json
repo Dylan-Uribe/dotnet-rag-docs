@@ -1,0 +1,443 @@
+{
+  "runAtUtc": "2026-09-20T05:49:52.0444872Z",
+  "judgeModel": "gpt-4o",
+  "calibration": {
+    "cases": 12,
+    "faithfulAgreement": 12,
+    "results": [
+      {
+        "id": "j01",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": true,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "The ANSWER states the same fact as the REFERENCE and is supported by the CONTEXT."
+      },
+      {
+        "id": "j02",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": false,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The ANSWER states an incorrect fee compared to the REFERENCE."
+      },
+      {
+        "id": "j03",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": null,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "The ANSWER conveys the same fact as the REFERENCE regarding the fee amount."
+      },
+      {
+        "id": "j04",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": true,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "The ANSWER conveys the same fact as the REFERENCE, stating the maximum permitted latency is 35 milliseconds."
+      },
+      {
+        "id": "j05",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": false,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The answer is unsupported by the context."
+      },
+      {
+        "id": "j06",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": false,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "The answer declines to answer, and there is no REFERENCE."
+      },
+      {
+        "id": "j07",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": null,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The ANSWER incorrectly states the maximum duration as one year instead of one Season."
+      },
+      {
+        "id": "j08",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": false,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The answer incorrectly names R\u00EDos Atl\u00E9tico instead of Monte Azur."
+      },
+      {
+        "id": "j09",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": true,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "Both the ANSWER and REFERENCE convey that the highest number of points is four."
+      },
+      {
+        "id": "j10",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": false,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The ANSWER does not convey the same fact as the REFERENCE."
+      },
+      {
+        "id": "j11",
+        "expectedFaithful": false,
+        "judgedFaithful": false,
+        "expectedCorrect": true,
+        "judgedCorrect": true,
+        "agrees": true,
+        "reason": "The ANSWER conveys the same fact as the REFERENCE."
+      },
+      {
+        "id": "j12",
+        "expectedFaithful": true,
+        "judgedFaithful": true,
+        "expectedCorrect": true,
+        "judgedCorrect": false,
+        "agrees": true,
+        "reason": "The ANSWER omits that the six hours is a minimum, which is included in the REFERENCE."
+      }
+    ]
+  },
+  "questionCount": 32,
+  "faithfulness": 0.9688,
+  "correctness": 0.875,
+  "questions": [
+    {
+      "id": "q01",
+      "kind": "semantic",
+      "question": "How long does a player have to show up in the lobby before the match is lost?",
+      "answer": "A club whose Starting Player is not present in the Tournament Client lobby at the scheduled kick-off time is allowed a grace period of eight minutes. Expiry of the grace period without presence results in forfeiture of the Leg.",
+      "reference": "A grace period of eight minutes (Article 6.8).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE, stating the grace period is eight minutes."
+    },
+    {
+      "id": "q02",
+      "kind": "numeric",
+      "question": "What is the annual fee for an Elite Division licence?",
+      "answer": "The annual fee for an Elite Division licence is 45,000 credits.",
+      "reference": "45,000 credits (Article 8.1).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER states the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q03",
+      "kind": "numeric",
+      "question": "How much money must an Elite Division club keep in its Financial Reserve?",
+      "answer": "An Elite Division club must maintain a Financial Reserve of not less than 120,000 credits.",
+      "reference": "Not less than 120,000 credits (Article 9.1).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q04",
+      "kind": "semantic",
+      "question": "Can the same player be signed by two different clubs at the same time?",
+      "answer": "No, a player may be registered to only one club at any time across both divisions.",
+      "reference": "No. A player may be registered to only one club at any time (Article 13.3).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q05",
+      "kind": "numeric",
+      "question": "What is the minimum monthly salary in the Open Division?",
+      "answer": "I could not find an answer to that in the provided documents.",
+      "reference": "900 credits (Article 16.5).",
+      "faithful": true,
+      "correct": false,
+      "reason": "The answer does not provide the fact stated in the REFERENCE."
+    },
+    {
+      "id": "q06",
+      "kind": "numeric",
+      "question": "When does the Secondary Transfer Window open and close?",
+      "answer": "The Secondary Transfer Window opens on 27 December and closes on 14 January.",
+      "reference": "It opens on 27 December and closes on 14 January (Article 17.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q07",
+      "kind": "semantic",
+      "question": "How many players can a club buy during one transfer window?",
+      "answer": "A club may not acquire more than four players in a single Transfer Window.",
+      "reference": "Not more than four (Article 18.4).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q08",
+      "kind": "semantic",
+      "question": "What happens if injuries leave a team with fewer players than the rules require?",
+      "answer": "A club whose Roster falls below the minimum by reason of injury, illness, or contract termination shall restore it within twenty-eight days. If it does not restore its Roster within that period, it may not field a side and forfeits each affected Fixture.",
+      "reference": "The roster must be restored within 28 days, otherwise fixtures are forfeit (Articles 14.6 and 14.7).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same facts as the REFERENCE."
+    },
+    {
+      "id": "q09",
+      "kind": "semantic",
+      "question": "What is the highest number of points a club can take from a single fixture?",
+      "answer": "The highest number of points a club can take from a single fixture is four points.",
+      "reference": "Four: three for the win plus one bonus point for winning both Legs (Article 26.4).",
+      "faithful": true,
+      "correct": true,
+      "reason": "ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q10",
+      "kind": "semantic",
+      "question": "What score is recorded when a club forfeits an entire fixture?",
+      "answer": "A forfeited Fixture is recorded as a 6-0 aggregate defeat.",
+      "reference": "A 6-0 aggregate defeat (Article 30.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q11",
+      "kind": "semantic",
+      "question": "If two clubs finish the season on the same number of points, how is the tie broken?",
+      "answer": "Where two or more clubs are level on points at the conclusion of the regular season, the tie is broken by applying the following criteria in order: first, aggregate goal difference across all Fixtures; second, total goals scored across all Fixtures; third, the results of the Fixtures played between the clubs concerned; fourth, the number of Fixtures won outright; fifth, the lower total of disciplinary points accrued.",
+      "reference": "By goal difference, then goals scored, then head-to-head, then fixtures won outright, then disciplinary points (Article 31).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER correctly lists the tiebreaker criteria in the order specified in Article 31."
+    },
+    {
+      "id": "q12",
+      "kind": "entity",
+      "question": "Where will the 2026-27 championship final be played?",
+      "answer": "The 2026-27 Championship Final will be played at the Arena Mar\u00EDtima, Valmora.",
+      "reference": "On LAN at the Arena Mar\u00EDtima, Valmora (Article 32.5).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q13",
+      "kind": "semantic",
+      "question": "What happens when a player loses connection early in a leg?",
+      "answer": "A disconnection occurring before the completion of the fifteenth in-game minute of a Leg results in a full restart of that Leg, with the score reset to nil.",
+      "reference": "Before the fifteenth in-game minute the Leg is restarted in full with the score reset (Article 38.1).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q14",
+      "kind": "numeric",
+      "question": "What is the maximum latency allowed when playing a fixture remotely?",
+      "answer": "The maximum permitted latency to the designated server region is 35 milliseconds.",
+      "reference": "35 milliseconds to the designated server region (Article 41.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q15",
+      "kind": "semantic",
+      "question": "Am I allowed to use a wireless mouse during a match?",
+      "answer": "Wireless connection of any component of the playing setup is prohibited, including wireless peripherals.",
+      "reference": "No. Wireless connection of any component of the playing setup is prohibited (Article 41.7).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q16",
+      "kind": "semantic",
+      "question": "How long before the final can the game version no longer be changed?",
+      "answer": "A Patch Freeze operates in the fourteen days preceding the Final, during which no new version may be adopted for any reason.",
+      "reference": "A Patch Freeze operates in the fourteen days preceding the Final (Article 43.4).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q17",
+      "kind": "semantic",
+      "question": "What is the minimum punishment for fixing a match?",
+      "answer": "The minimum sanction for a proven offence of match manipulation is a five-year ban from all CEFA activity.",
+      "reference": "A five-year ban from all CEFA activity (Article 45.3).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q18",
+      "kind": "semantic",
+      "question": "Can a player bet on a match in the division he does not play in?",
+      "answer": "No, players may not place any wager on any CEFA competition, irrespective of the division concerned.",
+      "reference": "No. The prohibition applies irrespective of the club or division concerned (Article 46.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q19",
+      "kind": "numeric",
+      "question": "How much is the fine for a false statement on the Matchsheet?",
+      "answer": "The fine for a false statement on the Matchsheet is 12,000 credits.",
+      "reference": "12,000 credits and forfeiture of the Fixture (Appendix C.1).",
+      "faithful": true,
+      "correct": false,
+      "reason": "The ANSWER omits the forfeiture of the Fixture, which is included in the REFERENCE."
+    },
+    {
+      "id": "q20",
+      "kind": "numeric",
+      "question": "How much prize money does the champion of the Championship Playoffs receive?",
+      "answer": "The champion of the Championship Playoffs receives 760,000 credits.",
+      "reference": "760,000 credits (Appendix A.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER states the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q21",
+      "kind": "entity",
+      "question": "Who scored the most goals in a single Elite Division regular season?",
+      "answer": "The record for the greatest number of goals scored by a player in an Elite Division regular season is 61, set by Nahuel Ferrada of Puerto Halc\u00F3n in Season 2022-23.",
+      "reference": "Nahuel Ferrada of Puerto Halc\u00F3n, with 61 goals in Season 2022-23 (B.4.3).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q22",
+      "kind": "entity",
+      "question": "Which club plays at the highest venue above sea level?",
+      "answer": "Monte Azur plays at the highest-altitude venue in the League at 2,840 metres above sea level.",
+      "reference": "Monte Azur, at the Sala Altura, 2,840 metres above sea level (D.5).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q23",
+      "kind": "entity",
+      "question": "Who is the head coach that has been in the job the longest?",
+      "answer": "Ver\u00F3nica Castell, the head coach of Sierra Bravo, appointed in 2021.",
+      "reference": "Ver\u00F3nica Castell of Sierra Bravo, appointed in 2021 (D.8).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q24",
+      "kind": "lexical",
+      "question": "Which build of the game is used for the opening match window of the season?",
+      "answer": "The Competition Build for the opening Match Window of Season 2026-27 is version 26.2.1.",
+      "reference": "Version 26.2.1 (Article 42.2 and E.6).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER correctly states the version as 26.2.1, which matches the REFERENCE."
+    },
+    {
+      "id": "q25",
+      "kind": "lexical",
+      "question": "What did version 26.1.0 change?",
+      "answer": "Version 26.1.0 reduced corner kick delivery accuracy by six percent, made a defensive line height adjustment available during play, standardised fatigue recovery between Legs at seventy-five percent of maximum for all squads, and closed two exploits involving the Tactical Presets system.",
+      "reference": "Corner kick accuracy reduced by six per cent, defensive line height adjustable during play, fatigue recovery standardised, two Tactical Presets exploits closed (E.4).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same facts as the REFERENCE."
+    },
+    {
+      "id": "q26",
+      "kind": "numeric",
+      "question": "How much does it cost to file a protest against the conduct of a fixture?",
+      "answer": "It costs 1,000 credits to file a protest against the conduct of a fixture.",
+      "reference": "A deposit of 1,000 credits, refunded if the protest succeeds (Article 53.4).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q27",
+      "kind": "semantic",
+      "question": "How quickly must the Appeals Panel rule when the make-up of a competition is at stake?",
+      "answer": "The Appeals Panel must decide within four days when the composition of a competition is at stake.",
+      "reference": "Within four days (Article 54.6).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE."
+    },
+    {
+      "id": "q28",
+      "kind": "numeric",
+      "question": "How many hours of coaching is an academy player entitled to each week?",
+      "answer": "An academy player is entitled to a minimum of six hours of structured coaching per week outside competition.",
+      "reference": "A minimum of six hours of structured coaching per week (Article 66.1).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q29",
+      "kind": "semantic",
+      "question": "Where does the money collected from fines end up?",
+      "answer": "Fines collected by CEFA are allocated to the Academy Development Fund.",
+      "reference": "In the Academy Development Fund (Articles 63.5 and 67.2).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER conveys the same fact as the REFERENCE and is supported by the CONTEXT."
+    },
+    {
+      "id": "q30",
+      "kind": "lexical",
+      "question": "What does Article 24 deal with?",
+      "answer": "Article 24 deals with registration embargoes.",
+      "reference": "The registration embargo: its effect, grounds and duration.",
+      "faithful": true,
+      "correct": false,
+      "reason": "ANSWER does not convey the same detail as the REFERENCE."
+    },
+    {
+      "id": "q31",
+      "kind": "lexical",
+      "question": "Which article governs timeouts in knockout competition?",
+      "answer": "Article 39 governs timeouts in knockout competition.",
+      "reference": "Article 39 (39.4 to 39.7).",
+      "faithful": true,
+      "correct": true,
+      "reason": "The ANSWER correctly identifies Article 39 as governing timeouts in knockout competition, matching the REFERENCE."
+    },
+    {
+      "id": "q32",
+      "kind": "cross-reference",
+      "question": "On what date does the Elite Division regular season actually end?",
+      "answer": "The Elite Division regular season actually ends on 28 March 2027.",
+      "reference": "Round 30 opens on 24 April 2027; Article 4.6 says 28 March 2027 but Appendix G.3.2 reads that as the end of Round 26 and G.3.3 makes the appendix prevail.",
+      "faithful": false,
+      "correct": false,
+      "reason": "The answer incorrectly states the season ends on 28 March 2027, while the reference correctly explains the discrepancy and the actual end date."
+    }
+  ]
+}

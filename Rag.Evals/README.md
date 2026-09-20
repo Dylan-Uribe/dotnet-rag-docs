@@ -1,11 +1,5 @@
 # Rag.Evals — retrieval evaluation
 
-Measures **retrieval quality**, which is the ceiling on the whole RAG: a chunk that is
-never retrieved can never be answered from, no matter how good the chat model is.
-
-This is not a test suite. Tests are binary and run in CI; an eval produces a score you
-compare between versions. Nothing here asserts, nothing fails the build.
-
 ## What it measures
 
 32 hand-labelled questions over `football.pdf` (the CEFL rulebook). Ground truth is the
@@ -71,12 +65,9 @@ Only the 32 questions are embedded, so a run costs a fraction of a cent.
 
 # Abstention eval
 
-Measures the failure that hurts most in production: **answering a question the corpus
-cannot support**. A RAG that invents a plausible rule is worse than one that says nothing.
+Measures the failure of answering a question the corpus cannot support.
 
-30 questions: **20 unanswerable** plus **10 answerable controls**. The controls are not
-decoration — without them a system that always refuses would score a perfect 1.00 and be
-useless. Both failure directions are reported.
+30 questions: **20 unanswerable** plus **10 answerable controls**.
 
 Unanswerable questions come in three flavours, hardest last:
 
@@ -148,7 +139,7 @@ chunking when the sweep finishes.
 ## Results
 
 `ctx tok` is the measured mean token count of the retrieved context per question,
-counted with the same `cl100k_base` tokenizer the chunker uses — not an estimate.
+counted with the same `cl100k_base` tokenizer the chunker uses.
 
 | chunk | overlap | chunks | ctx tok | r@1 | r@3 | r@5 | r@10 | MRR | misses |
 |---|---|---|---|---|---|---|---|---|---|
@@ -229,3 +220,106 @@ dotnet run --project Rag.Evals -- --eval abstention --chunk 150 --overlap 30
 
 That forces a re-ingest, and leaves the corpus chunked that way. Restore it with
 `--reingest` under the configured settings.
+
+---
+
+# Faithfulness eval
+
+The first two evals grade machinery: did the right page come back, did the system decline
+when it should. This one grades the answer itself, on two axes that fail independently:
+
+- **faithful** — every claim in the answer is supported by the context it was given.
+- **correct** — the answer conveys the same fact as the reference written by hand.
+
+An answer can be faithful and wrong (it quoted the context accurately but answered a
+different question) or correct and unfaithful (it stated the right fact from
+pre-training, with nothing in the context to support it). Collapsing them into one score
+hides which of the two happened.
+
+Retrieval and generation are the real ones. Only the grading is delegated to a second
+model — which is where the difficulty lives.
+
+## Calibrating the judge first
+
+A judge is an instrument, and an uncalibrated instrument produces confident numbers about
+nothing. Before grading anything, the judge is run against
+[12 hand-labelled cases](GoldenSet/judge-calibration.json) whose verdicts are known:
+invented figures, unsupported additions, heavy paraphrase, world knowledge dressed as an
+answer, right-fact-wrong-entity, and an answer that quotes the context perfectly while
+answering the wrong question.
+
+That set earned its keep immediately. Three judge designs were measured against it:
+
+| Judge design | Faithfulness agreement |
+|---|---|
+| Ask for the verdict directly (gpt-4o-mini) | 10/12 |
+| Same, with tightened rules (gpt-4o-mini) | **9/12** — tightening made it worse |
+| Decompose into claims, rule on each, compute the verdict here (gpt-4o-mini) | 10/12 |
+| Decompose into claims (gpt-4o) | **12/12** |
+
+Two things fall out of that table. The tightening pass *lowered* agreement — without the
+calibration set it would have shipped as an improvement. And the remaining gap was a
+capability ceiling, not a prompt problem: the same prompt on a stronger model agrees
+everywhere. `gpt-4o` is therefore the configured judge, overridable with `--judge`.
+
+The claim-decomposition design is kept regardless of model: asking for a verdict directly,
+gpt-4o-mini repeatedly returned `faithful: true` while its own stated reason named an
+unsupported claim. Ruling on one small question at a time removes the room to average, and
+faithfulness is computed from the claims rather than asked for.
+
+One calibration case still disagrees, on `correct`, and the judge is arguably right: for a
+question with no reference answer, "correct" is not well defined, and the instruction to
+return `false` is a flaw in the specification rather than in the judge.
+
+## Results
+
+Judge `gpt-4o`, answers from `gpt-4o-mini`, chunking 350/70.
+
+| Metric | Value | |
+|---|---|---|
+| Faithfulness | **0.97** | 31/32 |
+| Correctness | **0.88** | 28/32 |
+
+| | correct | wrong |
+|---|---|---|
+| **faithful** | 28 | 3 |
+| **unfaithful** | 0 | 1 |
+
+Full output in [results/faithfulness-results.json](results/faithfulness-results.json),
+including the claim-by-claim rulings.
+
+## The four failures, and which of them are real
+
+**q32 is a real defect, and no earlier eval could have caught it.** Asked when the regular
+season ends, the system answered *28 March 2027*, which is what Article 4.6 says. Appendix
+G.3.2 states that this date is to be read as the end of Round 26, and G.3.3 makes the
+appendix prevail — the season ends on 24 April 2027. Retrieval did its job, abstention was
+not in play; the answer is simply wrong because the document contradicts itself and the
+model followed the first thing it read. This is the failure class that only end-to-end
+grading reaches.
+
+**q05 is the retrieval miss arriving downstream.** The system declined, which is the right
+behaviour when nothing useful was retrieved — it scores faithful and incorrect. The chunk
+dilution behind it is the same one the sweep showed 150/30 fixes.
+
+**q19 and q30 are artifacts of the golden set, not defects.** Asked *how much* the fine is,
+the system answered "12,000 credits"; the reference also mentions forfeiture of the
+fixture, so the judge marked it incomplete. Those reference answers were written for the
+retrieval eval, where they were never read by anything — reusing them as grading ground
+truth asks them to do a job they were not written for.
+
+Those two are left scored as they fell. Rewriting a reference after seeing the answer it
+failed is how a golden set quietly becomes a mirror; if they are rewritten it should be
+deliberately, and the number should be expected to rise for that reason rather than
+because anything improved.
+
+## Cost and what not to conclude
+
+Around 40 cents a run: 32 answers on `gpt-4o-mini` plus 32 gradings on `gpt-4o`, against
+fractions of a cent for the other evals.
+
+**This is the only eval whose instrument is itself a model.** Its number carries the
+judge's error as well as the system's, and 12 calibration cases bound that error loosely.
+The judge also comes from the same family as the model it grades, which is a known source
+of leniency. Treat 0.97 as "no evidence of widespread unfaithfulness", never as proof of
+its absence.

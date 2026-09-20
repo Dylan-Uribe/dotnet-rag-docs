@@ -82,3 +82,28 @@ public sealed record AbstentionOutcome(
 
     public bool IsCorrect => !IsHallucination && !IsOverRefusal;
 }
+
+/// <summary>
+/// A hand-labelled grading case. The context is written inline rather than retrieved,
+/// so the judge is tested on a fixed input whose correct verdict is known.
+/// </summary>
+public sealed record CalibrationCase(
+    string Id,
+    string Context,
+    string Question,
+    string Answer,
+    string? Reference,
+    bool ExpectedFaithful,
+    bool? ExpectedCorrect,
+    string Note);
+
+public sealed record CalibrationOutcome(CalibrationCase Case, JudgeVerdict Verdict)
+{
+    public bool FaithfulAgrees => Verdict.Faithful == Case.ExpectedFaithful;
+
+    /// <summary>Null where the expected verdict is genuinely arguable, and excluded from the score.</summary>
+    public bool? CorrectAgrees =>
+        Case.ExpectedCorrect is null ? null : Verdict.Correct == Case.ExpectedCorrect;
+}
+
+public sealed record FaithfulnessOutcome(EvalQuestion Question, string Answer, JudgeVerdict Verdict);

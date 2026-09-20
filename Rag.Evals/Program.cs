@@ -3,8 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.ML.Tokenizers;
+using OpenAI;
 using Rag.API.Data;
+using Rag.API.Generation;
 using Rag.API.Options;
 using Rag.API.Query;
 using Rag.API.Retrieval;
@@ -28,8 +32,14 @@ if (eval == "sweep")
 // --chunk/--overlap run any eval under a chunking other than the configured one.
 // They force a re-ingest: whatever is stored was cut to different boundaries.
 Dictionary<string, string?>? chunking = ChunkingOverrides(args);
+Dictionary<string, string?> overrides = new(chunking ?? []);
 
-using IHost host = EvalHost.Build(args, chunking);
+if (ArgValue(args, "--judge") is string judgeOverride)
+{
+    overrides["Judge:Model"] = judgeOverride;
+}
+
+using IHost host = EvalHost.Build(args, overrides.Count > 0 ? overrides : null);
 await using AsyncServiceScope scope = host.Services.CreateAsyncScope();
 
 await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
@@ -55,8 +65,13 @@ switch (eval)
         await RunAbstentionAsync();
         break;
 
+    case "faithfulness":
+        await RunFaithfulnessAsync();
+        break;
+
     default:
-        throw new ArgumentException($"Unknown eval '{eval}'. Use 'retrieval', 'abstention' or 'sweep'.");
+        throw new ArgumentException(
+            $"Unknown eval '{eval}'. Use 'retrieval', 'abstention', 'faithfulness' or 'sweep'.");
 }
 
 async Task RunRetrievalAsync()
@@ -90,6 +105,60 @@ async Task RunAbstentionAsync()
 
     AbstentionReport.Print(outcomes);
     await AbstentionReport.WriteJsonAsync(outcomes, OutputPath("abstention-results.json"));
+}
+
+async Task RunFaithfulnessAsync()
+{
+    OpenAIOptions ai = scope.ServiceProvider.GetRequiredService<IOptions<OpenAIOptions>>().Value;
+
+    string judgeModel =
+        host.Services.GetRequiredService<IConfiguration>()["Judge:Model"] ?? ai.ChatModel;
+
+    using IChatClient judgeClient = new OpenAIClient(ai.ApiKey)
+        .GetChatClient(judgeModel)
+        .AsIChatClient();
+
+    var runner = new FaithfulnessRunner(
+        scope.ServiceProvider.GetRequiredService<IRetriever>(),
+        scope.ServiceProvider.GetRequiredService<IAnswerGenerator>(),
+        new Judge(judgeClient));
+
+    Console.WriteLine($"Judge model: {judgeModel}");
+
+    if (judgeModel == ai.ChatModel)
+    {
+        Console.WriteLine("Warning: the judge is the same model that wrote the answers. See the README.");
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("Calibrating the judge before trusting it ...");
+
+    CalibrationCase[] cases = await GoldenSet.LoadAsync<CalibrationCase>("judge-calibration.json");
+    IReadOnlyList<CalibrationOutcome> calibration = await runner.CalibrateAsync(cases);
+
+    FaithfulnessReport.PrintCalibration(calibration);
+
+    double agreement = calibration.Count(outcome => outcome.FaithfulAgrees) / (double)calibration.Count;
+
+    if (agreement < 0.75)
+    {
+        Console.WriteLine();
+        Console.WriteLine(
+            $"Judge agreement is {agreement:0.00}. The numbers below measure the judge, not the system.");
+    }
+
+    if (args.Contains("--calibrate-only")) return;
+
+    EvalQuestion[] questions = await GoldenSet.LoadAsync<EvalQuestion>("retrieval-questions.json");
+
+    Console.WriteLine();
+    Console.WriteLine($"Grading {questions.Length} answers ...");
+
+    IReadOnlyList<FaithfulnessOutcome> outcomes = await runner.RunAsync(questions);
+
+    FaithfulnessReport.Print(outcomes);
+    await FaithfulnessReport.WriteJsonAsync(
+        calibration, outcomes, judgeModel, OutputPath("faithfulness-results.json"));
 }
 
 string OutputPath(string defaultFileName) =>

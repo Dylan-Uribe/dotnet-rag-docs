@@ -1,0 +1,122 @@
+[
+  {
+    "id": "j01",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.\n\n8.2 The Open Division Licence carries an annual fee of 12,000 credits.",
+    "question": "What is the annual fee for an Elite Division licence?",
+    "answer": "The annual fee for an Elite Division licence is 45,000 credits.",
+    "reference": "45,000 credits (Article 8.1).",
+    "expectedFaithful": true,
+    "expectedCorrect": true,
+    "note": "Baseline. If the judge fails this one it is unusable."
+  },
+  {
+    "id": "j02",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.\n\n8.2 The Open Division Licence carries an annual fee of 12,000 credits.",
+    "question": "What is the annual fee for an Elite Division licence?",
+    "answer": "The annual fee for an Elite Division licence is 60,000 credits.",
+    "reference": "45,000 credits (Article 8.1).",
+    "expectedFaithful": false,
+    "expectedCorrect": false,
+    "note": "Invented number. The most basic unfaithfulness there is."
+  },
+  {
+    "id": "j03",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.\n\n8.2 The Open Division Licence carries an annual fee of 12,000 credits.",
+    "question": "What is the annual fee for an Elite Division licence?",
+    "answer": "The annual fee is 45,000 credits, payable in three equal instalments.",
+    "reference": "45,000 credits (Article 8.1).",
+    "expectedFaithful": false,
+    "expectedCorrect": null,
+    "note": "Right fee, invented payment terms. Tests whether a single unsupported clause spoils an otherwise good answer."
+  },
+  {
+    "id": "j04",
+    "context": "41.2 The maximum permitted latency to the designated server region is 35 milliseconds.",
+    "question": "Am I allowed to play a remote fixture with a 50 millisecond ping?",
+    "answer": "No. Your latency to the designated server region may not exceed 35 milliseconds.",
+    "reference": "No, the maximum permitted latency is 35 milliseconds.",
+    "expectedFaithful": true,
+    "expectedCorrect": true,
+    "note": "Requires comparing 50 against 35. Tests that the judge allows ordinary inference instead of demanding a literal quote."
+  },
+  {
+    "id": "j05",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.",
+    "question": "What is the capital of France?",
+    "answer": "The capital of France is Paris.",
+    "reference": null,
+    "expectedFaithful": false,
+    "expectedCorrect": false,
+    "note": "True in the world, absent from the context. The judge must grade grounding, not truth."
+  },
+  {
+    "id": "j06",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.",
+    "question": "How much are match officials paid for each Fixture?",
+    "answer": "I could not find an answer to that in the provided documents.",
+    "reference": null,
+    "expectedFaithful": true,
+    "expectedCorrect": false,
+    "note": "Declining asserts nothing, so it cannot be unfaithful."
+  },
+  {
+    "id": "j07",
+    "context": "19.5 The minimum loan duration is sixty days. The maximum loan duration is one Season.",
+    "question": "How long can a loan last?",
+    "answer": "A loan lasts between sixty days and one year.",
+    "reference": "Between sixty days and one Season (Article 19.5).",
+    "expectedFaithful": false,
+    "expectedCorrect": null,
+    "note": "A Season is roughly a year but the context never says so. The subtlest case in the set."
+  },
+  {
+    "id": "j08",
+    "context": "D.5 Monte Azur. Founded in 2018 in the mountain city of Monte Azur, the club plays in azure and silver at the Sala Altura, capacity 1,500, the highest-altitude venue in the League at 2,840 metres above sea level.",
+    "question": "Which club plays at the highest venue above sea level?",
+    "answer": "Ríos Atlético plays at the highest venue in the League, 2,840 metres above sea level.",
+    "reference": "Monte Azur (D.5).",
+    "expectedFaithful": false,
+    "expectedCorrect": false,
+    "note": "Right number, wrong entity. Detail-level attribution error."
+  },
+  {
+    "id": "j09",
+    "context": "26.1 A club winning a Fixture on aggregate is awarded three points.\n\n26.4 A club that additionally wins both Legs of a Fixture is awarded one bonus point, for a maximum of four points from a single Fixture.",
+    "question": "What is the highest number of points a club can take from a single fixture?",
+    "answer": "Four: three points for winning on aggregate plus one bonus point for winning both Legs.",
+    "reference": "Four points (Article 26.4).",
+    "expectedFaithful": true,
+    "expectedCorrect": true,
+    "note": "Combines two clauses. Tests that synthesis across passages is not punished."
+  },
+  {
+    "id": "j10",
+    "context": "8.1 The Elite Division Licence carries an annual fee of 45,000 credits.\n\n8.2 The Open Division Licence carries an annual fee of 12,000 credits.",
+    "question": "What is the annual fee for an Open Division licence?",
+    "answer": "The Elite Division Licence carries an annual fee of 45,000 credits.",
+    "reference": "12,000 credits (Article 8.2).",
+    "expectedFaithful": true,
+    "expectedCorrect": false,
+    "note": "Quotes the context accurately while answering a different question. The case that proves the two axes are independent."
+  },
+  {
+    "id": "j11",
+    "context": "6.1 Elite Division Fixtures are ordinarily played on Fridays and Saturdays within the Match Window.\n\n6.2 Open Division Fixtures are ordinarily played on Thursdays and Sundays within the Match Window.",
+    "question": "How long is the grace period before a club forfeits?",
+    "answer": "The grace period is eight minutes.",
+    "reference": "Eight minutes (Article 6.8).",
+    "expectedFaithful": false,
+    "expectedCorrect": true,
+    "note": "The fact is correct for the document but absent from this context. The judge must grade against what was retrieved, not what exists."
+  },
+  {
+    "id": "j12",
+    "context": "66.1 A club shall provide each academy player with a minimum of six hours of structured coaching per week outside competition.",
+    "question": "How many hours of coaching is an academy player entitled to each week?",
+    "answer": "Six hours.",
+    "reference": "A minimum of six hours of structured coaching per week (Article 66.1).",
+    "expectedFaithful": true,
+    "expectedCorrect": true,
+    "note": "Terse but complete. Tests that brevity is not mistaken for missing support."
+  }
+]
