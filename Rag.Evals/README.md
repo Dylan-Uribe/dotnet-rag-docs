@@ -200,3 +200,32 @@ questions this cannot be separated from noise.
   longer ones means less surrounding context per fragment. The abstention eval must be
   re-run at 150/30 before adopting it — retrieval improving says nothing about whether
   the model still refuses correctly.
+
+## Validating 150/30 on the other eval
+
+Retrieval improving says nothing about generation, so the abstention eval was re-run
+under 150/30 — 182 short fragments instead of 84 longer ones is a real change to what the
+model reads.
+
+| | 350/70 | 150/30 |
+|---|---|---|
+| Abstention on unanswerable | 1.00 (20/20) | **1.00 (20/20)** |
+| Answer rate on controls | 1.00 (10/10) | **1.00 (10/10)** |
+| Template compliance | 1.00 | **1.00** |
+
+All ten control answers were also re-read by hand: same facts, different wording. No
+degradation. Output in
+[results/abstention-results-150-30.json](results/abstention-results-150-30.json).
+
+So 150/30 holds on both evals while halving context tokens. Adopting it is still a
+judgement call — see the overfitting caveat above — but it is now a judgement made
+against two measurements rather than one.
+
+Any eval can be run under a different chunking without touching configuration:
+
+```bash
+dotnet run --project Rag.Evals -- --eval abstention --chunk 150 --overlap 30
+```
+
+That forces a re-ingest, and leaves the corpus chunked that way. Restore it with
+`--reingest` under the configured settings.

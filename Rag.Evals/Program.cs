@@ -25,12 +25,25 @@ if (eval == "sweep")
     return;
 }
 
-using IHost host = EvalHost.Build(args);
+// --chunk/--overlap run any eval under a chunking other than the configured one.
+// They force a re-ingest: whatever is stored was cut to different boundaries.
+Dictionary<string, string?>? chunking = ChunkingOverrides(args);
+
+using IHost host = EvalHost.Build(args, chunking);
 await using AsyncServiceScope scope = host.Services.CreateAsyncScope();
 
 await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.MigrateAsync();
 
-await CorpusLoader.EnsureIngestedAsync(scope.ServiceProvider, reingest: args.Contains("--reingest"));
+if (chunking is not null)
+{
+    RagOptions applied = scope.ServiceProvider.GetRequiredService<IOptions<RagOptions>>().Value;
+    Console.WriteLine(
+        $"Chunking override: {applied.ChunkSizeTokens} tokens / {applied.ChunkOverlapTokens} overlap.");
+}
+
+await CorpusLoader.EnsureIngestedAsync(
+    scope.ServiceProvider,
+    reingest: args.Contains("--reingest") || chunking is not null);
 
 switch (eval)
 {
@@ -81,6 +94,21 @@ async Task RunAbstentionAsync()
 
 string OutputPath(string defaultFileName) =>
     ArgValue(args, "--out") ?? Path.Combine(AppContext.BaseDirectory, defaultFileName);
+
+static Dictionary<string, string?>? ChunkingOverrides(string[] arguments)
+{
+    string? size = ArgValue(arguments, "--chunk");
+    string? overlap = ArgValue(arguments, "--overlap");
+
+    if (size is null && overlap is null) return null;
+
+    var overrides = new Dictionary<string, string?>();
+
+    if (size is not null) overrides["Rag:ChunkSizeTokens"] = size;
+    if (overlap is not null) overrides["Rag:ChunkOverlapTokens"] = overlap;
+
+    return overrides;
+}
 
 static string? ArgValue(string[] arguments, string name)
 {
