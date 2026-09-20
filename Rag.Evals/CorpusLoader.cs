@@ -16,7 +16,7 @@ internal static class CorpusLoader
     /// Makes sure the corpus is in the database. Re-ingesting is opt-in because the
     /// embeddings are already paid for; pass --reingest after changing chunking.
     /// </summary>
-    public static async Task EnsureIngestedAsync(IServiceProvider services, bool reingest)
+    public static async Task EnsureIngestedAsync(IServiceProvider services, bool reingest, bool quiet = false)
     {
         ApplicationDbContext context = services.GetRequiredService<ApplicationDbContext>();
 
@@ -36,12 +36,13 @@ internal static class CorpusLoader
         {
             context.Documents.RemoveRange(existing);
             await context.SaveChangesAsync();
-            Console.WriteLine($"Removed {existing.Count} previously ingested copy/copies.");
+
+            if (!quiet) Console.WriteLine($"Removed {existing.Count} previously ingested copy/copies.");
         }
 
         string path = Path.Combine(AppContext.BaseDirectory, "Corpus", CorpusFileName);
 
-        Console.WriteLine($"Ingesting {path} ...");
+        if (!quiet) Console.WriteLine($"Ingesting {path} ...");
 
         await using FileStream stream = File.OpenRead(path);
 
@@ -54,6 +55,9 @@ internal static class CorpusLoader
             throw new InvalidOperationException($"Ingestion failed: {result.Error!.Message}");
         }
 
-        Console.WriteLine($"Corpus: {CorpusFileName} ({result.Value!.ChunkCount} chunks from {result.Value.PageCount} pages)");
+        if (!quiet)
+        {
+            Console.WriteLine($"Corpus: {CorpusFileName} ({result.Value!.ChunkCount} chunks from {result.Value.PageCount} pages)");
+        }
     }
 }

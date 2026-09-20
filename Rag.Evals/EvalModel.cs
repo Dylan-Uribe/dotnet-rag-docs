@@ -19,9 +19,23 @@ public sealed record QuestionOutcome(
     EvalQuestion Question,
     IReadOnlyList<int> RetrievedPages,
     IReadOnlyList<double> Distances,
-    int FirstHitRank)
+    int FirstHitRank,
+    int ContextTokens)
 {
     public bool IsHitWithin(int k) => FirstHitRank > 0 && FirstHitRank <= k;
+}
+
+/// <summary>One chunking configuration and what the golden set scored under it.</summary>
+public sealed record SweepResult(
+    int ChunkSizeTokens,
+    int ChunkOverlapTokens,
+    int ChunkCount,
+    IReadOnlyList<QuestionOutcome> Outcomes)
+{
+    public double AverageContextTokens => Outcomes.Average(outcome => outcome.ContextTokens);
+
+    public IEnumerable<string> MissedQuestionIds =>
+        Outcomes.Where(outcome => outcome.FirstHitRank == 0).Select(outcome => outcome.Question.Id);
 }
 
 /// <summary>

@@ -1,3 +1,4 @@
+using Microsoft.ML.Tokenizers;
 using Rag.API.Retrieval;
 
 namespace Rag.Evals;
@@ -7,7 +8,7 @@ namespace Rag.Evals;
 /// question is embedded by the configured model and searched with pgvector, exactly
 /// as <c>POST /query</c> would do it.
 /// </summary>
-public sealed class EvalRunner(IRetriever retriever)
+public sealed class EvalRunner(IRetriever retriever, Tokenizer tokenizer)
 {
     public async Task<IReadOnlyList<QuestionOutcome>> RunAsync(IReadOnlyList<EvalQuestion> questions)
     {
@@ -20,7 +21,16 @@ public sealed class EvalRunner(IRetriever retriever)
             int[] pages = chunks.Select(chunk => chunk.PageNumber).ToArray();
             double[] distances = chunks.Select(chunk => chunk.Distance).ToArray();
 
-            outcomes.Add(new QuestionOutcome(question, pages, distances, FirstHitRank(question, pages)));
+            // What this question would actually cost the chat model, measured rather
+            // than estimated: it is the other half of every chunk-size decision.
+            int contextTokens = chunks.Sum(chunk => tokenizer.CountTokens(chunk.Text));
+
+            outcomes.Add(new QuestionOutcome(
+                question,
+                pages,
+                distances,
+                FirstHitRank(question, pages),
+                contextTokens));
 
             Console.Write('.');
         }
